@@ -25,7 +25,8 @@ public class MainCharacter : Character
     {
         if (!base.CanMove()) return false;
         bool checkItem = !inventory.IsUsingItem();
-        return checkItem;
+        bool checkSpell = !inventory.IsUsingItem();
+        return checkItem && checkSpell;
     }
     #endregion
 

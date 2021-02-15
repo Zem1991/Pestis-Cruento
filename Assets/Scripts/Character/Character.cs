@@ -7,6 +7,10 @@ public class Character : MonoBehaviour
 {
     private CharacterController _characterController;
 
+    [Header("Identification")]
+    [SerializeField] private string characterName = "Unknown Character";
+    [SerializeField] private Allegiance allegiance = Allegiance.ENEMY;
+
     [Header("Health")]
     [SerializeField] private int currentHealth = 100;
     [SerializeField] private int maximumHealth = 100;
@@ -26,6 +30,7 @@ public class Character : MonoBehaviour
     [SerializeField] private float spawnHeight = 1.5F;
     [SerializeField] private float spawnDistance = 0.5F;
 
+    public Collider GetCollider() { return _characterController; }
     public Vector3 GetCenterOfMass() { return _characterController.center; }
 
     protected virtual void Start()
@@ -39,6 +44,16 @@ public class Character : MonoBehaviour
         AbsorbImpact();
         ActualMovement();
     }
+
+    #region Identification
+    public string GetCharacterName() { return characterName; }
+    public Allegiance GetAllegiance() { return allegiance; }
+    public bool CheckOpponent(Character other)
+    {
+        Allegiance otherAllegiance = other.GetAllegiance();
+        return allegiance.CheckOpponent(otherAllegiance);
+    }
+    #endregion
 
     #region Health
     public int GetCurrentHealth() { return currentHealth; }
@@ -86,7 +101,7 @@ public class Character : MonoBehaviour
     private void ActualMovement()
     {
         Vector3 speed = movement + impact;
-        speed *= Time.deltaTime;
+        speed *= Time.fixedDeltaTime;
         _characterController.Move(speed);
     }
     #endregion

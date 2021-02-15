@@ -14,7 +14,7 @@ public class SummonItem : AbstractItem
     //    return true;
     //}
 
-    public override bool Use(Character user, Vector3 targetPos, Character targetChar)
+    public override bool Use(MainCharacter user, Vector3 targetPos, Character targetChar)
     {
         if (!base.Use(user, targetPos, targetChar)) return false;
         user.SpawnCharacter(summon);

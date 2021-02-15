@@ -152,6 +152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f36908ee92e9604bbdfc7d41db4985a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterName: Unknown Character
+  allegiance: 2
   currentHealth: 100
   maximumHealth: 100
   movementSpeed: 8
@@ -176,7 +178,7 @@ MonoBehaviour:
   character: {fileID: 5507573797517214493}
   sightRange: 15
   sightRadius: 120
-  foundCharacter: {fileID: 5507573797517214493}
+  foundCharacter: {fileID: 0}
 --- !u!1 &5507573797788191984
 GameObject:
   m_ObjectHideFlags: 0

@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 5507573797517214493}
   - component: {fileID: 5507573797517214495}
   m_Layer: 0
-  m_Name: Sentinel
+  m_Name: Sentinel Automata
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152,6 +152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f36908ee92e9604bbdfc7d41db4985a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterName: Sentinel Automata
+  allegiance: 1
   currentHealth: 100
   maximumHealth: 100
   movementSpeed: 8
@@ -159,7 +161,8 @@ MonoBehaviour:
   movement: {x: 0, y: 0, z: 0}
   impact: {x: 0, y: 0, z: 0}
   mass: 85
-  spawnPos: {x: 0, y: 1.5, z: 0.5}
+  spawnHeight: 1.5
+  spawnDistance: 0.5
 --- !u!114 &5507573797517214495
 MonoBehaviour:
   m_ObjectHideFlags: 0

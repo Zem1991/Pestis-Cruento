@@ -45,8 +45,9 @@ public class Player : MonoBehaviour
             if (nextItem) mainCharacter.NextItem();
             else mainCharacter.PreviousItem();
 
-            List<AbstractItem> listItem = mainCharacter.GetInventory().GetItemList();
-            AbstractItem selectedItem = mainCharacter.GetInventory().GetSelectedItem();
+            Inventory inventory = mainCharacter.GetInventory();
+            List<AbstractItem> listItem = inventory.GetItemList();
+            AbstractItem selectedItem = inventory.GetSelectedItem();
             uiHandler.ManualUpdateSelection(listItem, selectedItem);
         }
         else if (useItem)

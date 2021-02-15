@@ -14,11 +14,11 @@ public class EffectItem : AbstractItem
     //    return true;
     //}
 
-    public override bool Use(Character user, Vector3 targetPos, Character targetChar)
+    public override bool Use(MainCharacter user, Vector3 targetPos, Character targetChar)
     {
         if (!base.Use(user, targetPos, targetChar)) return false;
         Vector3 position = user.transform.position;
-        effect.ExecuteEffect(user, position, user);
+        effect.ExecuteEffect(user, position, targetChar);
         return true;
     }
 }

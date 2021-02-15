@@ -10,8 +10,11 @@ public class DamageEffect : AbstractEffect
 
     public override bool ExecuteEffect(Character caster, Vector3 targetPos, Character targetChar)
     {
-        int amount = Random.Range(amountMin, amountMax);
-        if (targetChar) return targetChar.LoseHealth(amount);
-        else return false;
+        if (targetChar)
+        {
+            int amount = Random.Range(amountMin, amountMax);
+            return targetChar.LoseHealth(amount);
+        }
+        return false;
     }
 }

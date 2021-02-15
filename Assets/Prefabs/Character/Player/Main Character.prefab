@@ -154,6 +154,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemList: []
   selectedItem: {fileID: 0}
+  targetPos: {x: 0, y: 0, z: 0}
+  targetChar: {fileID: 0}
   itemStart: 0
   itemEnd: 0
   currentDuration: 0
@@ -354,10 +356,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b3d7ecfb52f97c4e94bd35c3b345f0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attack: {fileID: 0}
-  movementSpeed: 10
+  characterName: Main Character
+  allegiance: 1
   currentHealth: 100
   maximumHealth: 100
+  movementSpeed: 10
+  attack: {fileID: 6329535448023472105}
+  movement: {x: 0, y: 0, z: 0}
+  impact: {x: 0, y: 0, z: 0}
+  mass: 100
+  spawnHeight: 1.5
+  spawnDistance: 0.5
+  currentMana: 100
+  maximumMana: 100
   inventory: {fileID: 0}
 --- !u!1 &3133542437699425227
 GameObject:

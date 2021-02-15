@@ -48,5 +48,5 @@ MonoBehaviour:
   currentAmount: 0
   startDuration: 0.3
   endDuration: 0.2
-  projectile: {fileID: 317995165129285855, guid: e95e37af43047cc42b0d96030bb29ac7,
+  projectile: {fileID: 2947142167285287540, guid: e95e37af43047cc42b0d96030bb29ac7,
     type: 3}

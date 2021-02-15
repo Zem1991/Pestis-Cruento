@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,7 +8,8 @@ public abstract class AbstractItem : MonoBehaviour
     [SerializeField] private string itemName;
     [SerializeField] private Sprite itemSprite;
 
-    [Header("Amount")]
+    [Header("Utilization")]
+    [SerializeField] private bool useOnSelf;
     [SerializeField] private int currentAmount;
 
     [Header("Settings")]
@@ -21,7 +21,8 @@ public abstract class AbstractItem : MonoBehaviour
     public Sprite GetItemSprite() { return itemSprite; }
     #endregion
 
-    #region Amount
+    #region Utilization
+    public bool IsUseOnSelf() { return useOnSelf; }
     public int GetCurrentAmount() { return currentAmount; }
     public bool CanDecreaseAmount() { return currentAmount > 0; }
     public bool DecreaseAmount()
@@ -51,20 +52,18 @@ public abstract class AbstractItem : MonoBehaviour
 
     public bool CheckSame(AbstractItem other)
     {
-        //Type t1 = GetType();
-        //Type t2 = other.GetType();
         string t1 = other.GetItemName();
         string t2 = GetItemName();
         return t1 == t2;
     }
 
-    public virtual bool CanUse(Character user, Vector3 targetPos, Character targetChar)
+    public virtual bool CanUse(MainCharacter user, Vector3 targetPos, Character targetChar)
     {
         if (!CanDecreaseAmount()) return false;
         return true;
     }
 
-    public virtual bool Use(Character user, Vector3 targetPos, Character targetChar)
+    public virtual bool Use(MainCharacter user, Vector3 targetPos, Character targetChar)
     {
         if (!DecreaseAmount()) return false;
         return true;

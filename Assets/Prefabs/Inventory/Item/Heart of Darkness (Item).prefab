@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Heart of Darkness
   itemSprite: {fileID: 21300000, guid: 332347f05b5e56345929a54dd48e9762, type: 3}
+  useOnSelf: 1
   currentAmount: 0
   startDuration: 0.7
   endDuration: 0.3

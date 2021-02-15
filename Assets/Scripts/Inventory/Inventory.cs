@@ -91,8 +91,9 @@ public class Inventory : MonoBehaviour
     {
         if (IsUsingItem()) return false;
         if (!selectedItem) return false;
+
+        if (selectedItem.IsUseOnSelf()) targetChar = _mainCharacter;
         if (!selectedItem.CanUse(_mainCharacter, targetPos, targetChar)) return false;
-        //if (!selectedItem.DecreaseAmount()) return false;
 
         this.targetPos = targetPos;
         this.targetChar = targetChar;

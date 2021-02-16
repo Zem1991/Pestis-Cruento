@@ -19,9 +19,22 @@ public class UIPanel_Selection : MonoBehaviour
         else selectionBar.CloseBar();
     }
 
-    public void ManualUpdate(List<AbstractItem> itemList, AbstractItem currentSelection)
+    public void ManualUpdate()
     {
-        bool canShow = selectionBar.OpenBar(itemList, currentSelection);
+        selectionBar.CloseBar();
+        gameObject.SetActive(false);
+    }
+
+    public void ManualUpdate(List<AbstractItem> itemList, AbstractItem selectedItem)
+    {
+        bool canShow = selectionBar.OpenBar(itemList, selectedItem);
+        duration = durationMax;
+        gameObject.SetActive(canShow);
+    }
+
+    public void ManualUpdate(List<AbstractSpell> spellList, AbstractSpell selectedSpell)
+    {
+        bool canShow = selectionBar.OpenBar(spellList, selectedSpell);
         duration = durationMax;
         gameObject.SetActive(canShow);
     }

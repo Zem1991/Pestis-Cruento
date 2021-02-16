@@ -19,8 +19,8 @@ public class UIPanel_Player : MonoBehaviour
             AbstractItem item = mainCharacter.GetInventory().GetSelectedItem();
             selectedItem.Set(item);
 
-            //TODO: this one
-            selectedSpell.Set(null);
+            AbstractSpell spell = mainCharacter.GetGrimoire().GetSelectedSpell();
+            selectedSpell.Set(spell);
 
             float mpFillAmount = 1F * mainCharacter.GetCurrentMana() / mainCharacter.GetMaximumMana();
             mpFill.fillAmount = mpFillAmount;

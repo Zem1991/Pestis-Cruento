@@ -20,7 +20,7 @@ public class UISelectionBar : MonoBehaviour
         selectionItemList.Clear();
     }
 
-    public bool OpenBar(List<AbstractItem> itemList, AbstractItem currentSelection)
+    public bool OpenBar(List<AbstractItem> itemList, AbstractItem selectedItem)
     {
         ClearBar();
         if (itemList == null || itemList.Count <= 0) return false;
@@ -29,7 +29,22 @@ public class UISelectionBar : MonoBehaviour
         {
             UISelectionItem uiItem = Instantiate(prefabUISelectionItem, transform);
             uiItem.Set(item);
-            if (item != currentSelection) uiItem.transform.localScale *= 0.75F;
+            if (item != selectedItem) uiItem.transform.localScale *= 0.75F;
+            selectionItemList.Add(uiItem);
+        }
+        return true;
+    }
+
+    public bool OpenBar(List<AbstractSpell> spellList, AbstractSpell selectedSpell)
+    {
+        ClearBar();
+        if (spellList == null || spellList.Count <= 0) return false;
+
+        foreach (AbstractSpell spell in spellList)
+        {
+            UISelectionItem uiItem = Instantiate(prefabUISelectionItem, transform);
+            uiItem.Set(spell);
+            if (spell != selectedSpell) uiItem.transform.localScale *= 0.75F;
             selectionItemList.Add(uiItem);
         }
         return true;

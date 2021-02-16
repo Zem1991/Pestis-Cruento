@@ -26,4 +26,19 @@ public class UISelectionItem : MonoBehaviour
             amount.text = null;
         }
     }
+
+    public void Set(AbstractSpell spell)
+    {
+        amount.text = null;
+        if (spell)
+        {
+            itemImage.sprite = spell.GetSpellSprite();
+            itemImage.color = Color.white;
+        }
+        else
+        {
+            itemImage.sprite = null;
+            itemImage.color = Color.clear;
+        }
+    }
 }

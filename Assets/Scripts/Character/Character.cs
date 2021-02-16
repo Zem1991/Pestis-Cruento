@@ -8,27 +8,27 @@ public class Character : MonoBehaviour
     private CharacterController _characterController;
 
     [Header("Identification")]
-    [SerializeField] private string characterName = "Unknown Character";
-    [SerializeField] private Allegiance allegiance = Allegiance.ENEMY;
+    [SerializeField] protected string characterName = "Unknown Character";
+    [SerializeField] protected Allegiance allegiance = Allegiance.ENEMY;
 
     [Header("Health")]
-    [SerializeField] private int currentHealth = 100;
-    [SerializeField] private int maximumHealth = 100;
+    [SerializeField] protected int currentHealth = 100;
+    [SerializeField] protected int maximumHealth = 100;
 
     [Header("Movement")]
-    [SerializeField] private float movementSpeed = 8F;
+    [SerializeField] protected float movementSpeed = 8F;
     
     [Header("Combat")]
-    [SerializeField] private Attack attack;
+    [SerializeField] protected Attack attack;
 
     [Header("Physics")]
-    [SerializeField] private Vector3 movement;
-    [SerializeField] private Vector3 impact;
-    [SerializeField] private float mass = 100F;
+    [SerializeField] protected Vector3 movement;
+    [SerializeField] protected Vector3 impact;
+    [SerializeField] protected float mass = 100F;
 
     [Header("Spawning")]
-    [SerializeField] private float spawnHeight = 1.5F;
-    [SerializeField] private float spawnDistance = 0.5F;
+    [SerializeField] protected float spawnHeight = 1.5F;
+    [SerializeField] protected float spawnDistance = 0.5F;
 
     public Collider GetCollider() { return _characterController; }
     public Vector3 GetCenterOfMass() { return _characterController.center; }
@@ -37,6 +37,11 @@ public class Character : MonoBehaviour
     {
         _characterController = GetComponent<CharacterController>();
         attack = GetComponentInChildren<Attack>();
+    }
+
+    protected virtual void Update()
+    {
+        //Nothing yet...
     }
 
     protected virtual void FixedUpdate()

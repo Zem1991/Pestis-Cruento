@@ -6,18 +6,28 @@ using UnityEngine;
 public class MainCharacter : Character
 {
     [Header("Mana")]
-    [SerializeField] private int currentMana = 100;
-    [SerializeField] private int maximumMana = 100;
+    [SerializeField] protected int currentMana = 100;
+    [SerializeField] protected int maximumMana = 100;
+    [SerializeField] protected float manaRegenPerSecond;
+    [SerializeField] protected float manaRegenPerFrame;
+    [SerializeField] protected float manaRegenRemainder;
 
     [Header("Inventory")]
-    [SerializeField] private Inventory inventory;
+    [SerializeField] protected Inventory inventory;
 
-    public Inventory GetInventory() { return inventory; }
-
+    [Header("Grimoire")]
+    [SerializeField] protected Grimoire grimoire;
+    
     protected override void Start()
     {
         base.Start();
         inventory = GetComponentInChildren<Inventory>();
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+        ManaRegen();
     }
 
     #region Movement
@@ -50,21 +60,63 @@ public class MainCharacter : Character
         return CheckFullMana();
     }
     public bool CheckFullMana() { return currentMana >= maximumMana; }
+    private void ManaRegen()
+    {
+        float baseFactor = maximumMana / 150F;
+        float healthFactor = currentHealth / 100F;
+        manaRegenPerSecond = baseFactor * healthFactor;
+
+        if (CheckFullMana())
+        {
+            manaRegenPerFrame = 0;
+            manaRegenRemainder = 0;
+        }
+        else
+        {
+            manaRegenPerFrame = manaRegenPerSecond * Time.deltaTime;
+            manaRegenRemainder += manaRegenPerFrame % 1;
+            int actualManaRegen = Mathf.FloorToInt(manaRegenPerFrame);
+            if (manaRegenRemainder >= 1)
+            {
+                actualManaRegen += 1;
+                manaRegenRemainder -= 1;
+            }
+            GainMana(actualManaRegen);
+        }
+    }
     #endregion
 
     #region Inventory
+    public Inventory GetInventory() { return inventory; }
     public void NextItem() { inventory.NextItem(); }
     public void PreviousItem() { inventory.PreviousItem(); }
     public bool CanUseItem()
     {
         AbstractItem item = inventory.GetSelectedItem();
-        bool checkAttack = item && !inventory.IsUsingItem();
-        return checkAttack;
+        bool checkItem = item && !inventory.IsUsingItem();
+        return checkItem;
     }
     public void UseItem(Vector3 targetPos, Character targetChar)
     {
         if (!CanUseItem()) return;
         inventory.StartItem(targetPos, targetChar);
+    }
+    #endregion
+
+    #region Grimoire
+    public Grimoire GetGrimoire() { return grimoire; }
+    public void NextSpell() { grimoire.NextSpell(); }
+    public void PreviousSpell() { grimoire.PreviousSpell(); }
+    public bool CanCastSpell()
+    {
+        AbstractSpell spell = grimoire.GetSelectedSpell();
+        bool checkSpell = spell && !grimoire.IsCastingSpell();
+        return checkSpell;
+    }
+    public void CastSpell(Vector3 targetPos, Character targetChar)
+    {
+        if (!CanCastSpell()) return;
+        grimoire.StartSpell(targetPos, targetChar);
     }
     #endregion
 }

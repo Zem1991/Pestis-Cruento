@@ -46,6 +46,21 @@ public class InputHandler : MonoBehaviour
     }
     #endregion
 
+    #region Grimoire
+    public bool CastSpell()
+    {
+        return inputKBM.CastSpell();
+    }
+    public bool PreviousSpell()
+    {
+        return inputKBM.PreviousSpell();
+    }
+    public bool NextSpell()
+    {
+        return inputKBM.NextSpell();
+    }
+    #endregion
+
     #region Modifiers
     public bool ModCtrl()
     {

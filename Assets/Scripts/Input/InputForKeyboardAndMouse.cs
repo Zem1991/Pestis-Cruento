@@ -17,6 +17,12 @@ public class InputForKeyboardAndMouse : MonoBehaviour
     [SerializeField] private KeyCode prevItem = KeyCode.Z;
     [SerializeField] private KeyCode nextItem = KeyCode.X;
 
+    [Header("Grimoire")]
+    [SerializeField] private KeyCode castSpell = KeyCode.R;
+    [SerializeField] private KeyCode castSpellModCtrl = KeyCode.Mouse1;
+    [SerializeField] private KeyCode prevSpell = KeyCode.C;
+    [SerializeField] private KeyCode nextSpell = KeyCode.V;
+
     [Header("Modifiers")]
     [SerializeField] private KeyCode modCtrl = KeyCode.LeftControl;
 
@@ -53,6 +59,23 @@ public class InputForKeyboardAndMouse : MonoBehaviour
     public bool NextItem()
     {
         return Input.GetKeyDown(nextItem);
+    }
+    #endregion
+
+    #region Grimoire
+    public bool CastSpell()
+    {
+        bool directKey = Input.GetKeyDown(castSpell);
+        bool modCtrlKey = ModCtrl() && Input.GetKeyDown(castSpellModCtrl);
+        return directKey || modCtrlKey;
+    }
+    public bool PreviousSpell()
+    {
+        return Input.GetKeyDown(prevSpell);
+    }
+    public bool NextSpell()
+    {
+        return Input.GetKeyDown(nextSpell);
     }
     #endregion
 

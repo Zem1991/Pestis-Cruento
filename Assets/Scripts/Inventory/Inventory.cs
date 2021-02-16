@@ -75,6 +75,7 @@ public class Inventory : MonoBehaviour
 
     public void NextItem()
     {
+        if (!GetSelectedItem()) return;
         int index = itemList.IndexOf(selectedItem) + 1;
         if (index >= itemList.Count) index = 0;
         selectedItem = itemList[index];
@@ -82,6 +83,7 @@ public class Inventory : MonoBehaviour
 
     public void PreviousItem()
     {
+        if (!GetSelectedItem()) return;
         int index = itemList.IndexOf(selectedItem) - 1;
         if (index < 0) index = itemList.Count - 1;
         selectedItem = itemList[index];

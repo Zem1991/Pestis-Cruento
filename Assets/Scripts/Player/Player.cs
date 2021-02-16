@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
     private void Update()
     {
         Inventory();
+        Grimoire();
         Combat();
         Movement();
         Camera();
@@ -46,9 +47,9 @@ public class Player : MonoBehaviour
             else mainCharacter.PreviousItem();
 
             Inventory inventory = mainCharacter.GetInventory();
-            List<AbstractItem> listItem = inventory.GetItemList();
+            List<AbstractItem> itemList = inventory.GetItemList();
             AbstractItem selectedItem = inventory.GetSelectedItem();
-            uiHandler.ManualUpdateSelection(listItem, selectedItem);
+            uiHandler.ManualUpdateSelection(itemList, selectedItem);
         }
         else if (useItem)
         {
@@ -56,6 +57,33 @@ public class Player : MonoBehaviour
             Vector3 targetPos = inputCursor.GetCurrentPosScene();
             Character targetChar = inputCursor.GetFoundCharacter();
             mainCharacter.UseItem(targetPos, targetChar);
+        }
+    }
+
+    private void Grimoire()
+    {
+        if (currentCharacter != mainCharacter) return;
+
+        bool nextSpell = inputHandler.NextSpell();
+        bool prevSpell = inputHandler.PreviousSpell();
+        bool castSpell = inputHandler.CastSpell();
+
+        if (nextSpell || prevSpell)
+        {
+            if (nextSpell) mainCharacter.NextSpell();
+            else mainCharacter.PreviousSpell();
+
+            Grimoire grimoire = mainCharacter.GetGrimoire();
+            List<AbstractSpell> spellList = grimoire.GetSpellList();
+            AbstractSpell selectedSpell = grimoire.GetSelectedSpell();
+            uiHandler.ManualUpdateSelection(spellList, selectedSpell);
+        }
+        else if (castSpell)
+        {
+            InputCursor inputCursor = inputHandler.GetInputCursor();
+            Vector3 targetPos = inputCursor.GetCurrentPosScene();
+            Character targetChar = inputCursor.GetFoundCharacter();
+            mainCharacter.CastSpell(targetPos, targetChar);
         }
     }
 

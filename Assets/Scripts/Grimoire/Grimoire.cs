@@ -75,6 +75,7 @@ public class Grimoire : MonoBehaviour
 
     public void NextSpell()
     {
+        if (!GetSelectedSpell()) return;
         int index = spellList.IndexOf(selectedSpell) + 1;
         if (index >= spellList.Count) index = 0;
         selectedSpell = spellList[index];
@@ -82,6 +83,7 @@ public class Grimoire : MonoBehaviour
 
     public void PreviousSpell()
     {
+        if (!GetSelectedSpell()) return;
         int index = spellList.IndexOf(selectedSpell) - 1;
         if (index < 0) index = spellList.Count - 1;
         selectedSpell = spellList[index];

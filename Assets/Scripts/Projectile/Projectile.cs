@@ -24,6 +24,11 @@ public class Projectile : MonoBehaviour
     {
         this.owner = owner;
         this.homingTarget = homingTarget;
+
+        if (homingTarget)
+        {
+            transform.LookAt(homingTarget.transform);
+        }
     }
 
     protected virtual void OnDrawGizmos()
@@ -32,8 +37,9 @@ public class Projectile : MonoBehaviour
         {
             Color homingColor = Color.red;
             homingColor.b = 0.5F;
+            Vector3 position = homingTarget.transform.position;
             Gizmos.color = homingColor;
-            Gizmos.DrawLine(transform.position, homingTarget.transform.position);
+            Gizmos.DrawLine(transform.position, position);
         }
     }
 

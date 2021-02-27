@@ -155,7 +155,7 @@ MonoBehaviour:
   itemList: []
   selectedItem: {fileID: 0}
   targetPos: {x: 0, y: 0, z: 0}
-  targetChar: {fileID: 0}
+  targetObj: {fileID: 0}
   itemStart: 0
   itemEnd: 0
   currentDuration: 0
@@ -357,6 +357,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b3d7ecfb52f97c4e94bd35c3b345f0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _characterController: {fileID: 3032257203394449557}
   characterName: Main Character
   allegiance: 1
   currentHealth: 100
@@ -452,7 +453,7 @@ MonoBehaviour:
   spellList: []
   selectedSpell: {fileID: 0}
   targetPos: {x: 0, y: 0, z: 0}
-  targetChar: {fileID: 0}
+  targetObj: {fileID: 0}
   spellStart: 0
   spellEnd: 0
   currentDuration: 0

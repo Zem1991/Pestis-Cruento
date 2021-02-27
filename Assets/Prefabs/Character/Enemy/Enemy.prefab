@@ -152,6 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f36908ee92e9604bbdfc7d41db4985a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _characterController: {fileID: 5507573797517214492}
   characterName: Unknown Character
   allegiance: 2
   currentHealth: 100

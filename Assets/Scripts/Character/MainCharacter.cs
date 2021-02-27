@@ -18,12 +18,6 @@ public class MainCharacter : Character
     [Header("Grimoire")]
     [SerializeField] protected Grimoire grimoire;
     
-    protected override void Start()
-    {
-        base.Start();
-        inventory = GetComponentInChildren<Inventory>();
-    }
-
     protected override void Update()
     {
         base.Update();

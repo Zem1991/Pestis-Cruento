@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class Character : MonoBehaviour, ITargetable
 {
-    private CharacterController _characterController;
+    [Header("Self references")]
+    [SerializeField] private CharacterController _characterController;
 
     [Header("Identification")]
     [SerializeField] protected string characterName = "Unknown Character";
@@ -32,10 +33,11 @@ public class Character : MonoBehaviour, ITargetable
 
     public Collider GetCollider() { return _characterController; }
 
-    protected virtual void Start()
+    private void OnDrawGizmos()
     {
-        _characterController = GetComponent<CharacterController>();
-        attack = GetComponentInChildren<Attack>();
+        Vector3 position = GetTargetablePosition();
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(position, 0.25F);
     }
 
     protected virtual void Update()
@@ -159,7 +161,7 @@ public class Character : MonoBehaviour, ITargetable
     #region ITargetable
     public Vector3 GetTargetablePosition()
     {
-        return _characterController.center;
+        return transform.position + _characterController.center;
     }
     #endregion
 }

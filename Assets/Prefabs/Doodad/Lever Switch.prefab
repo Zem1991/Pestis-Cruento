@@ -64,6 +64,8 @@ MonoBehaviour:
   currentHealth: 10
   maximumHealth: 10
   animator: {fileID: 6647295377783256111}
+  targetableOffset: {x: 0, y: 0.5, z: 0}
+  propagtionList: []
 --- !u!95 &6647295377783256111
 Animator:
   serializedVersion: 3

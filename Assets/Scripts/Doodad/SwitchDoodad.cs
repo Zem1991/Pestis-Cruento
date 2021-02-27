@@ -13,6 +13,13 @@ public class SwitchDoodad : Doodad, ITargetable, IInteractionTarget, ITelekinesi
     [Header("Propagation")]
     [SerializeField] protected List<SwitchDoodad> propagtionList = new List<SwitchDoodad>();
 
+    private void OnDrawGizmos()
+    {
+        Vector3 position = GetTargetablePosition();
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(position, 0.25F);
+    }
+
     private void Start()
     {
         animator = GetComponent<Animator>();

@@ -27,11 +27,9 @@ public class SeekerProjectile : Projectile
         Collider[] colliders = Physics.OverlapSphere(transform.position, seekRange);
         foreach (Collider forCol in colliders)
         {
-            Character chara = forCol.GetComponent<Character>();
-            if (!chara) continue;
-            if (chara == owner) continue;
-            if (!owner.CheckOpponent(chara)) continue;
-            homingTarget = chara;
+            GameObject forObj = forCol.gameObject;
+            if (!CheckValidHomingTarget(forObj)) continue;
+            homingTarget = forObj;
             break;
         }
     }

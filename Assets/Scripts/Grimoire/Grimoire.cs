@@ -12,7 +12,7 @@ public class Grimoire : MonoBehaviour
     [Header("Execution")]
     [SerializeField] private AbstractSpell selectedSpell;
     [SerializeField] private Vector3 targetPos;
-    [SerializeField] private Character targetChar;
+    [SerializeField] private GameObject targetObj;
     [SerializeField] private bool spellStart;
     [SerializeField] private bool spellEnd;
     [SerializeField] private float currentDuration;
@@ -57,7 +57,7 @@ public class Grimoire : MonoBehaviour
                 spellStart = false;
                 spellEnd = true;
                 currentDuration = 0;
-                selectedSpell.Cast(_mainCharacter, targetPos, targetChar);
+                selectedSpell.Cast(_mainCharacter, targetPos, targetObj);
             }
         }
         else if (spellEnd)
@@ -66,7 +66,7 @@ public class Grimoire : MonoBehaviour
             if (currentDuration >= endDuration)
             {
                 targetPos = Vector3.zero;
-                targetChar = null;
+                targetObj = null;
                 spellEnd = false;
                 currentDuration = 0;
             }
@@ -89,16 +89,16 @@ public class Grimoire : MonoBehaviour
         selectedSpell = spellList[index];
     }
 
-    public bool StartSpell(Vector3 targetPos, Character targetChar)
+    public bool StartSpell(Vector3 targetPos, GameObject targetObj)
     {
         if (IsCastingSpell()) return false;
         if (!selectedSpell) return false;
 
-        if (selectedSpell.IsCastOnSelf()) targetChar = _mainCharacter;
-        if (!selectedSpell.CanCast(_mainCharacter, targetPos, targetChar)) return false;
+        if (selectedSpell.IsCastOnSelf()) targetObj = _mainCharacter.gameObject;
+        if (!selectedSpell.CanCast(_mainCharacter, targetPos, targetObj)) return false;
 
         this.targetPos = targetPos;
-        this.targetChar = targetChar;
+        this.targetObj = targetObj;
         spellStart = true;
         return true;
     }
@@ -112,7 +112,7 @@ public class Grimoire : MonoBehaviour
     {
         if (!InterruptSpell()) return false;
         targetPos = Vector3.zero;
-        targetChar = null;
+        targetObj = null;
         spellStart = false;
         spellEnd = false;
         currentDuration = 0;

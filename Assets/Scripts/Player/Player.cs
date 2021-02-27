@@ -7,6 +7,8 @@ public class Player : MonoBehaviour
 {
     [Header("Self references")]
     [SerializeField] private PlayerCamera playerCamera;
+    [SerializeField] private GameObject interactionProjector;
+    [SerializeField] private GameObject cursorProjector;
 
     [Header("Other references")]
     [SerializeField] private InputHandler inputHandler;
@@ -16,6 +18,13 @@ public class Player : MonoBehaviour
     [SerializeField] private MainCharacter mainCharacter;
     [SerializeField] private Character currentCharacter;
 
+    [Header("Interaction target")]
+    [SerializeField] private float interactionRange = 1F;
+    [SerializeField] private GameObject interactionObj;
+
+    [Header("Cursor target")]
+    [SerializeField] private GameObject cursorTargetObj;
+
     private void Start()
     {
         currentCharacter = mainCharacter;
@@ -23,14 +32,28 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        Interaction();
+
         Inventory();
         Grimoire();
         Combat();
+
         Movement();
         Camera();
 
-        MainCharacter mainChar = mainCharacter == currentCharacter ? mainCharacter : null;
-        uiHandler.ManualUpdatePlayer(mainChar);
+        SeekInteractionTarget();
+        SeekCursorTarget();
+
+        CallManualUIUpdate();
+    }
+
+    private void Interaction()
+    {
+        bool interaction = inputHandler.Interaction();
+        if (!interaction || interactionObj == null) return;
+
+        IInteractionTarget interactionTarget = interactionObj.GetComponent<IInteractionTarget>();
+        if (interactionTarget != null && interactionTarget.CanInteract()) interactionTarget.Interact();
     }
 
     private void Inventory()
@@ -55,8 +78,8 @@ public class Player : MonoBehaviour
         {
             InputCursor inputCursor = inputHandler.GetInputCursor();
             Vector3 targetPos = inputCursor.GetCurrentPosScene();
-            Character targetChar = inputCursor.GetFoundCharacter();
-            mainCharacter.UseItem(targetPos, targetChar);
+            GameObject targetObj = inputCursor.GetFoundTargetable();
+            mainCharacter.UseItem(targetPos, targetObj);
         }
     }
 
@@ -82,8 +105,8 @@ public class Player : MonoBehaviour
         {
             InputCursor inputCursor = inputHandler.GetInputCursor();
             Vector3 targetPos = inputCursor.GetCurrentPosScene();
-            Character targetChar = inputCursor.GetFoundCharacter();
-            mainCharacter.CastSpell(targetPos, targetChar);
+            GameObject targetObj = inputCursor.GetFoundTargetable();
+            mainCharacter.CastSpell(targetPos, targetObj);
         }
     }
 
@@ -102,9 +125,60 @@ public class Player : MonoBehaviour
         direction = rotationAdjustment * direction;
         currentCharacter.Movement(direction);
     }
-    
+
     private void Camera()
     {
         if (currentCharacter) transform.position = currentCharacter.transform.position;
+    }
+
+    private void SeekInteractionTarget()
+    {
+        interactionObj = null;
+        Collider[] colliders = Physics.OverlapSphere(transform.position, interactionRange);
+        foreach (Collider forColl in colliders)
+        {
+            IInteractionTarget forInteractionTarget = forColl.GetComponent<IInteractionTarget>();
+            if (forInteractionTarget == null) continue;
+            interactionObj = forColl.gameObject;
+            break;
+        }
+
+        if (interactionObj != null)
+        {
+            interactionProjector.transform.position = interactionObj.transform.position;
+            interactionProjector.gameObject.SetActive(true);
+        }
+        else
+        {
+            interactionProjector.gameObject.SetActive(false);
+            interactionProjector.transform.position = transform.position;
+        }
+    }
+
+    private void SeekCursorTarget()
+    {
+        InputCursor inputCursor = inputHandler.GetInputCursor();
+        GameObject foundTargetable = inputCursor.GetFoundTargetable();
+
+        if (foundTargetable == mainCharacter) foundTargetable = null;
+        if (foundTargetable == currentCharacter) foundTargetable = null;
+        cursorTargetObj = foundTargetable;
+
+        if (cursorTargetObj != null)
+        {
+            cursorProjector.transform.position = cursorTargetObj.transform.position;
+            cursorProjector.gameObject.SetActive(true);
+        }
+        else
+        {
+            cursorProjector.gameObject.SetActive(false);
+            cursorProjector.transform.position = transform.position;
+        }
+    }
+
+    private void CallManualUIUpdate()
+    {
+        MainCharacter mainChar = mainCharacter == currentCharacter ? mainCharacter : null;
+        uiHandler.ManualUpdatePlayer(mainChar);
     }
 }

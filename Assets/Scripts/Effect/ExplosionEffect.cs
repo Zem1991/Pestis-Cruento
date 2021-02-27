@@ -9,7 +9,7 @@ public class ExplosionEffect : AbstractEffect
     [SerializeField] private int damage;
     [SerializeField] private float strength;
 
-    public override bool ExecuteEffect(Character caster, Vector3 targetPos, Character targetChar)
+    public override bool ExecuteEffect(Character caster, Vector3 targetPos, GameObject targetObj)
     {
         Collider[] colliders = Physics.OverlapSphere(targetPos, radius);
         foreach (Collider forColl in colliders)
@@ -17,7 +17,7 @@ public class ExplosionEffect : AbstractEffect
             Character forChar = forColl.GetComponent<Character>();
             if (!forChar) continue;
 
-            Vector3 forCharPos = forChar.transform.position + forChar.GetCenterOfMass();
+            Vector3 forCharPos = forChar.transform.position + forChar.GetTargetablePosition();
             float distance = Vector3.Distance(forCharPos, targetPos);
             float distanceFactor = (radius - distance) / radius;
             if (distanceFactor < 0) distanceFactor = 0;

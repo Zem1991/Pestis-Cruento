@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1116841054658944224}
   - component: {fileID: 2843674073037205669}
+  - component: {fileID: 6746755590313673957}
   m_Layer: 0
   m_Name: Drawbridge
   m_TagString: Untagged
@@ -44,11 +45,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ff2163ef7ec32748bb16a65b279809a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doodadName: Unknown Doodad
+  doodadName: Drawbridge
   isDestroyable: 0
   currentHealth: 10
   maximumHealth: 10
-  switchState: 0
+  animator: {fileID: 6746755590313673957}
+--- !u!95 &6746755590313673957
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 393200605327138649}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f56ae5dada0395a419bb992f213705d7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &638659017162738476
 GameObject:
   m_ObjectHideFlags: 0
@@ -305,6 +325,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2805007629670014971}
+  - component: {fileID: 6208116328300793573}
   m_Layer: 0
   m_Name: Axis
   m_TagString: Untagged
@@ -327,6 +348,25 @@ Transform:
   m_Father: {fileID: 4843785776774519684}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -60, y: 0, z: 0}
+--- !u!95 &6208116328300793573
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6776746200489759839}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &6997521699327761450
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,7 +13,8 @@ public class InputCursor : MonoBehaviour
     [SerializeField] private Vector3 currentPosScene;
 
     [Header("Found objects")]
-    [SerializeField] private Character foundCharacter;
+    [SerializeField] private GameObject foundTargetable;
+    //[SerializeField] private Character foundCharacter;
 
     #region Screen cursor
     public Vector2 GetCurrentPosScreen() { return currentPosScreen; }
@@ -26,7 +27,8 @@ public class InputCursor : MonoBehaviour
     #endregion
 
     #region Found objects
-    public Character GetFoundCharacter() { return foundCharacter; }
+    public GameObject GetFoundTargetable() { return foundTargetable; }
+    //public Character GetFoundCharacter() { return foundCharacter; }
     #endregion
 
     public void ReadCursor(Camera camera)
@@ -45,11 +47,14 @@ public class InputCursor : MonoBehaviour
         currentPosScene = raycastHitSingle.point;
 
         RaycastHit[] raycastHitMultiple = Physics.RaycastAll(ray, Mathf.Infinity);
-        foundCharacter = null;
+        foundTargetable = null;
 
         foreach (RaycastHit forRH in raycastHitMultiple)
         {
-            if (!foundCharacter) foundCharacter = forRH.collider.GetComponent<Character>();
+            ITargetable forTargetable = forRH.collider.GetComponent<ITargetable>();
+            if (forTargetable == null) continue;
+            foundTargetable = forRH.collider.gameObject;
+            break;
         }
     }
 }

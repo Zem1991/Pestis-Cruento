@@ -15,12 +15,12 @@ public class Projectile : MonoBehaviour
 
     [Header("Initialization")]
     [SerializeField] protected Character owner;
-    [SerializeField] protected Character homingTarget;
+    [SerializeField] protected GameObject homingTarget;
 
     [Header("Duration")]
     [SerializeField] protected float durationCurrent;
 
-    public void Initialize(Character owner, Character homingTarget)
+    public void Initialize(Character owner, GameObject homingTarget)
     {
         this.owner = owner;
         this.homingTarget = homingTarget;
@@ -60,24 +60,25 @@ public class Projectile : MonoBehaviour
         ContactPoint contact = collision.contacts[0];
         Vector3 point = contact.point;
 
-        Character character = collision.gameObject.GetComponent<Character>();
-        effect.ExecuteEffect(owner, point, character);
+        GameObject targetObj = collision.gameObject;
+        effect.ExecuteEffect(owner, point, targetObj);
         //_rigidbody.velocity = Vector3.zero;
         Destroy(gameObject);
     }
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    Character character = other.GetComponent<Character>();
-    //    if (character == spawner) return;
+    protected bool CheckValidHomingTarget(GameObject homingTarget)
+    {
+        Character chara = homingTarget.GetComponent<Character>();
+        bool charaIsNotOwner = chara != owner;
+        bool charaIsOpponent = owner.CheckOpponent(chara);
+        bool isCharacter = chara && charaIsNotOwner && charaIsOpponent;
 
-    //    Vector3 point = other.;
-    //    //Debug.Log("Projectile hit at: " + point);
+        TelekinesisEffect tkEffect = effect as TelekinesisEffect;
+        ITelekinesisTarget tkTarget = homingTarget.GetComponent<ITelekinesisTarget>();
+        bool isTkTarget = tkEffect && tkTarget != null;
 
-    //    effect.ExecuteEffect(spawner, point, character);
-    //    //_rigidbody.velocity = Vector3.zero;
-    //    Destroy(gameObject);
-    //}
+        return isCharacter || isTkTarget;
+    }
     
     private bool HasGuidance()
     {
@@ -88,8 +89,11 @@ public class Projectile : MonoBehaviour
     {
         if (HasGuidance())
         {
-            Vector3 targetPos = homingTarget.transform.position + homingTarget.GetCenterOfMass();
+            Vector3 targetPos = homingTarget.transform.position;
             float step = homingSpeed * Time.deltaTime;
+
+            Character homingCharacter = homingTarget.GetComponent<Character>();
+            if (homingCharacter) targetPos += homingCharacter.GetTargetablePosition();
 
             Vector3 direction = targetPos - transform.position;
             Vector3 rotation = Vector3.RotateTowards(transform.forward, direction, step, 0F);

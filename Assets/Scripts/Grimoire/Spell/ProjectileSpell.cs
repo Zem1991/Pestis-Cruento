@@ -14,10 +14,10 @@ public class ProjectileSpell : AbstractSpell
     //    return true;
     //}
 
-    public override bool Cast(MainCharacter caster, Vector3 targetPos, Character targetChar)
+    public override bool Cast(MainCharacter caster, Vector3 targetPos, GameObject targetObj)
     {
-        if (!base.Cast(caster, targetPos, targetChar)) return false;
-        caster.SpawnProjectile(projectile, targetChar);
+        if (!base.Cast(caster, targetPos, targetObj)) return false;
+        caster.SpawnProjectile(projectile, targetObj);
         return true;
     }
 }

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Character : MonoBehaviour
+public class Character : MonoBehaviour, ITargetable
 {
     private CharacterController _characterController;
 
@@ -31,7 +31,6 @@ public class Character : MonoBehaviour
     [SerializeField] protected float spawnDistance = 0.5F;
 
     public Collider GetCollider() { return _characterController; }
-    public Vector3 GetCenterOfMass() { return _characterController.center; }
 
     protected virtual void Start()
     {
@@ -55,6 +54,7 @@ public class Character : MonoBehaviour
     public Allegiance GetAllegiance() { return allegiance; }
     public bool CheckOpponent(Character other)
     {
+        if (!other) return false;
         Allegiance otherAllegiance = other.GetAllegiance();
         return allegiance.CheckOpponent(otherAllegiance);
     }
@@ -137,14 +137,14 @@ public class Character : MonoBehaviour
     #endregion
 
     #region Spawning
-    public void SpawnProjectile(Projectile projectile, Character target)
+    public void SpawnProjectile(Projectile projectile, GameObject targetObj)
     {
         Vector3 pos = transform.position;
         pos += transform.forward * spawnDistance;
         pos.y += spawnHeight;
         Quaternion rot = transform.rotation;
         Projectile proj = Instantiate(projectile, pos, rot);
-        proj.Initialize(this, target);
+        proj.Initialize(this, targetObj);
     }
     public void SpawnCharacter(Character character)
     {
@@ -153,6 +153,13 @@ public class Character : MonoBehaviour
         Quaternion rot = transform.rotation;
         Character chara = Instantiate(character, pos, rot);
         //chara.Initialize(this, null);
+    }
+    #endregion
+
+    #region ITargetable
+    public Vector3 GetTargetablePosition()
+    {
+        return _characterController.center;
     }
     #endregion
 }

@@ -8,13 +8,12 @@ public class DamageEffect : AbstractEffect
     [SerializeField] private int amountMin;
     [SerializeField] private int amountMax;
 
-    public override bool ExecuteEffect(Character caster, Vector3 targetPos, Character targetChar)
+    public override bool ExecuteEffect(Character caster, Vector3 targetPos, GameObject targetObj)
     {
-        if (targetChar)
-        {
-            int amount = Random.Range(amountMin, amountMax);
-            return targetChar.LoseHealth(amount);
-        }
-        return false;
+        Character targetChar = targetObj.GetComponent<Character>();
+        if (!targetChar) return false;
+
+        int amount = Random.Range(amountMin, amountMax);
+        return targetChar.LoseHealth(amount);
     }
 }

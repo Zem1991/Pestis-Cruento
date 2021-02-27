@@ -17,6 +17,13 @@ public class InputHandler : MonoBehaviour
     public InputCursor GetInputCursor() { return inputCursor; }
     #endregion
 
+    #region Modifiers
+    public bool ModCtrl()
+    {
+        return inputKBM.ModCtrl();
+    }
+    #endregion
+
     #region Movement
     public Vector3 Movement()
     {
@@ -61,10 +68,10 @@ public class InputHandler : MonoBehaviour
     }
     #endregion
 
-    #region Modifiers
-    public bool ModCtrl()
+    #region Interaction
+    public bool Interaction()
     {
-        return inputKBM.ModCtrl();
+        return inputKBM.Interaction();
     }
     #endregion
 }

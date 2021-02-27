@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class InputForKeyboardAndMouse : MonoBehaviour
 {
+    [Header("Modifiers")]
+    [SerializeField] private KeyCode modCtrl = KeyCode.LeftControl;
+
     [Header("Movement")]
     [SerializeField] private string movementAxisH = "Horizontal";
     [SerializeField] private string movementAxisV = "Vertical";
@@ -23,8 +26,15 @@ public class InputForKeyboardAndMouse : MonoBehaviour
     [SerializeField] private KeyCode prevSpell = KeyCode.C;
     [SerializeField] private KeyCode nextSpell = KeyCode.V;
 
-    [Header("Modifiers")]
-    [SerializeField] private KeyCode modCtrl = KeyCode.LeftControl;
+    [Header("Interaction")]
+    [SerializeField] private KeyCode interaction = KeyCode.E;
+
+    #region Modifiers
+    public bool ModCtrl()
+    {
+        return Input.GetKey(modCtrl);
+    }
+    #endregion
 
     #region Movement
     public Vector3 Movement()
@@ -79,10 +89,10 @@ public class InputForKeyboardAndMouse : MonoBehaviour
     }
     #endregion
 
-    #region Modifiers
-    public bool ModCtrl()
+    #region Interaction
+    public bool Interaction()
     {
-        return Input.GetKey(modCtrl);
+        return Input.GetKeyDown(interaction);
     }
     #endregion
 }

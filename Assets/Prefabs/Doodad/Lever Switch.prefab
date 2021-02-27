@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 1116841054658944224}
   - component: {fileID: 2328738895427851887}
   - component: {fileID: 2843674073037205669}
+  - component: {fileID: 6647295377783256111}
   m_Layer: 0
-  m_Name: Switch Doodad
+  m_Name: Lever Switch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,7 +46,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!114 &2843674073037205669
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58,11 +59,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ff2163ef7ec32748bb16a65b279809a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doodadName: Unknown Doodad
+  doodadName: Switch Doodad
   isDestroyable: 0
   currentHealth: 10
   maximumHealth: 10
-  switchState: 0
+  animator: {fileID: 6647295377783256111}
+--- !u!95 &6647295377783256111
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 393200605327138649}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2994b02065693a64983f1ae01a25e3ba, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &638659017162738476
 GameObject:
   m_ObjectHideFlags: 0

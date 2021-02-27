@@ -12,7 +12,7 @@ public class Inventory : MonoBehaviour
     [Header("Execution")]
     [SerializeField] private AbstractItem selectedItem;
     [SerializeField] private Vector3 targetPos;
-    [SerializeField] private Character targetChar;
+    [SerializeField] private GameObject targetObj;
     [SerializeField] private bool itemStart;
     [SerializeField] private bool itemEnd;
     [SerializeField] private float currentDuration;
@@ -57,7 +57,7 @@ public class Inventory : MonoBehaviour
                 itemStart = false;
                 itemEnd = true;
                 currentDuration = 0;
-                selectedItem.Use(_mainCharacter, targetPos, targetChar);
+                selectedItem.Use(_mainCharacter, targetPos, targetObj);
             }
         }
         else if (itemEnd)
@@ -66,7 +66,7 @@ public class Inventory : MonoBehaviour
             if (currentDuration >= endDuration)
             {
                 targetPos = Vector3.zero;
-                targetChar = null;
+                targetObj = null;
                 itemEnd = false;
                 currentDuration = 0;
             }
@@ -89,16 +89,16 @@ public class Inventory : MonoBehaviour
         selectedItem = itemList[index];
     }
 
-    public bool StartItem(Vector3 targetPos, Character targetChar)
+    public bool StartItem(Vector3 targetPos, GameObject targetObj)
     {
         if (IsUsingItem()) return false;
         if (!selectedItem) return false;
 
-        if (selectedItem.IsUseOnSelf()) targetChar = _mainCharacter;
-        if (!selectedItem.CanUse(_mainCharacter, targetPos, targetChar)) return false;
+        if (selectedItem.IsUseOnSelf()) targetObj = _mainCharacter.gameObject;
+        if (!selectedItem.CanUse(_mainCharacter, targetPos, targetObj)) return false;
 
         this.targetPos = targetPos;
-        this.targetChar = targetChar;
+        this.targetObj = targetObj;
         itemStart = true;
         return true;
     }
@@ -112,7 +112,7 @@ public class Inventory : MonoBehaviour
     {
         if (!IsUsingItem()) return false;
         targetPos = Vector3.zero;
-        targetChar = null;
+        targetObj = null;
         itemStart = false;
         itemEnd = false;
         currentDuration = 0;

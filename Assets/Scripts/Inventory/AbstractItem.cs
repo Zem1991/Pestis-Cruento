@@ -57,13 +57,13 @@ public abstract class AbstractItem : MonoBehaviour
         return t1 == t2;
     }
 
-    public virtual bool CanUse(MainCharacter user, Vector3 targetPos, Character targetChar)
+    public virtual bool CanUse(MainCharacter user, Vector3 targetPos, GameObject targetObj)
     {
         if (!CanDecreaseAmount()) return false;
         return true;
     }
 
-    public virtual bool Use(MainCharacter user, Vector3 targetPos, Character targetChar)
+    public virtual bool Use(MainCharacter user, Vector3 targetPos, GameObject targetObj)
     {
         if (!DecreaseAmount()) return false;
         return true;

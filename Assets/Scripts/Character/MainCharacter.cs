@@ -96,10 +96,10 @@ public class MainCharacter : Character
         bool checkItem = item && !inventory.IsUsingItem();
         return checkItem;
     }
-    public void UseItem(Vector3 targetPos, Character targetChar)
+    public void UseItem(Vector3 targetPos, GameObject targetObj)
     {
         if (!CanUseItem()) return;
-        inventory.StartItem(targetPos, targetChar);
+        inventory.StartItem(targetPos, targetObj);
     }
     #endregion
 
@@ -113,10 +113,10 @@ public class MainCharacter : Character
         bool checkSpell = spell && !grimoire.IsCastingSpell();
         return checkSpell;
     }
-    public void CastSpell(Vector3 targetPos, Character targetChar)
+    public void CastSpell(Vector3 targetPos, GameObject targetObj)
     {
         if (!CanCastSpell()) return;
-        grimoire.StartSpell(targetPos, targetChar);
+        grimoire.StartSpell(targetPos, targetObj);
     }
     #endregion
 }

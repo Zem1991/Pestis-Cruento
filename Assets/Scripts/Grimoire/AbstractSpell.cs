@@ -48,13 +48,13 @@ public abstract class AbstractSpell : MonoBehaviour
         return t1 == t2;
     }
 
-    public virtual bool CanCast(MainCharacter caster, Vector3 targetPos, Character targetChar)
+    public virtual bool CanCast(MainCharacter caster, Vector3 targetPos, GameObject targetObj)
     {
         if (!CanPayManaCost(caster)) return false;
         return true;
     }
 
-    public virtual bool Cast(MainCharacter caster, Vector3 targetPos, Character targetChar)
+    public virtual bool Cast(MainCharacter caster, Vector3 targetPos, GameObject targetObj)
     {
         if (!PayManaCost(caster)) return false;
         return true;

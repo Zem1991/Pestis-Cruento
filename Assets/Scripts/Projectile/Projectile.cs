@@ -15,29 +15,32 @@ public class Projectile : MonoBehaviour
 
     [Header("Initialization")]
     [SerializeField] protected Character owner;
-    [SerializeField] protected GameObject homingTarget;
+    [SerializeField] protected ITargetable homingTarget;
+    [SerializeField] protected GameObject homingTargetObj;
 
     [Header("Duration")]
     [SerializeField] protected float durationCurrent;
 
-    public void Initialize(Character owner, GameObject homingTarget)
+    public void Initialize(Character owner, GameObject homingTargetObj)
     {
         this.owner = owner;
-        this.homingTarget = homingTarget;
-
-        if (homingTarget)
+        bool validHoming = CheckValidHomingTarget(homingTargetObj);
+        if (validHoming)
         {
-            transform.LookAt(homingTarget.transform);
+            homingTarget = homingTargetObj?.GetComponent<ITargetable>();
+            this.homingTargetObj = homingTargetObj;
+
+            transform.LookAt(homingTarget.GetTargetablePosition());
         }
     }
 
     protected virtual void OnDrawGizmos()
     {
-        if (HasGuidance())
+        if (homingTarget != null)
         {
-            Color homingColor = Color.red;
+            Color homingColor = HasGuidance() ? Color.cyan : Color.blue;
             homingColor.b = 0.5F;
-            Vector3 position = homingTarget.transform.position;
+            Vector3 position = homingTarget.GetTargetablePosition();
             Gizmos.color = homingColor;
             Gizmos.DrawLine(transform.position, position);
         }
@@ -72,16 +75,19 @@ public class Projectile : MonoBehaviour
         Destroy(gameObject);
     }
 
-    protected bool CheckValidHomingTarget(GameObject homingTarget)
+    protected bool CheckValidHomingTarget(GameObject obj)
     {
-        Character chara = homingTarget.GetComponent<Character>();
-        bool charaIsNotOwner = chara != owner;
-        bool charaIsOpponent = owner.CheckOpponent(chara);
-        bool isCharacter = chara && charaIsNotOwner && charaIsOpponent;
+        ITargetable targetable = obj?.GetComponent<ITargetable>();
+        if (targetable == null) return false;
 
+        Character charaTarget = obj.GetComponent<Character>();
+        bool charaIsNotOwner = charaTarget != owner;
+        bool charaIsOpponent = owner.CheckOpponent(charaTarget);
+        bool isCharacter = charaTarget && charaIsNotOwner && charaIsOpponent;
+
+        ITelekinesisTarget tkTarget = obj.GetComponent<ITelekinesisTarget>();
         TelekinesisEffect tkEffect = effect as TelekinesisEffect;
-        ITelekinesisTarget tkTarget = homingTarget.GetComponent<ITelekinesisTarget>();
-        bool isTkTarget = tkEffect && tkTarget != null;
+        bool isTkTarget = tkTarget != null && tkEffect;
 
         return isCharacter || isTkTarget;
     }
@@ -95,11 +101,12 @@ public class Projectile : MonoBehaviour
     {
         if (HasGuidance())
         {
-            Vector3 targetPos = homingTarget.transform.position;
+            Vector3 targetPos = homingTarget.GetTargetablePosition();
+            //Vector3 targetPos = this.homingTarget.transform.position;
             float step = homingSpeed * Time.deltaTime;
 
-            Character homingCharacter = homingTarget.GetComponent<Character>();
-            if (homingCharacter) targetPos += homingCharacter.GetTargetablePosition();
+            //Character homingTarget = this.homingTarget.GetComponent<Character>();
+            //if (homingTarget) targetPos += homingTarget.GetTargetablePosition();
 
             Vector3 direction = targetPos - transform.position;
             Vector3 rotation = Vector3.RotateTowards(transform.forward, direction, step, 0F);

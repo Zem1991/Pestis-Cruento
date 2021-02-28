@@ -23,13 +23,15 @@ public class SeekerProjectile : Projectile
 
     private void Seek()
     {
-        if (homingTarget) return;
+        if (homingTarget != null) return;
         Collider[] colliders = Physics.OverlapSphere(transform.position, seekRange);
         foreach (Collider forCol in colliders)
         {
             GameObject forObj = forCol.gameObject;
             if (!CheckValidHomingTarget(forObj)) continue;
-            homingTarget = forObj;
+
+            ITargetable targetable = forObj.GetComponent<ITargetable>();
+            homingTarget = targetable;
             break;
         }
     }

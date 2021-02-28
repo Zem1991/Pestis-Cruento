@@ -40,7 +40,7 @@ public class SwitchDoodad : Doodad, ITargetable, IInteractionTarget, ITelekinesi
     public bool Interact()
     {
         if (!CanInteract()) return false;
-        Debug.Log("ToogleSwitchState()");
+        Debug.Log(gameObject.name + " ToogleSwitchState()");
         
         string name = "On";
         bool value = animator.GetBool(name);

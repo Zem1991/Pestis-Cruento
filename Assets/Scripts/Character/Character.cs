@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Character : MonoBehaviour, ITargetable
+public partial class Character : MonoBehaviour, ITargetable
 {
     [Header("Self references")]
     [SerializeField] private CharacterController _characterController;
@@ -21,17 +21,18 @@ public class Character : MonoBehaviour, ITargetable
     
     [Header("Combat")]
     [SerializeField] protected Attack attack;
+    [SerializeField] protected float projSpawnHeight = 1.5F;
+    [SerializeField] protected float projSpawnDistance = 0.5F;
+
+    [Header("Statuses")]
+    [SerializeField] protected Statuses statuses;
 
     [Header("Physics")]
     [SerializeField] protected Vector3 movement;
     [SerializeField] protected Vector3 impact;
     [SerializeField] protected float mass = 100F;
 
-    [Header("Spawning")]
-    [SerializeField] protected float spawnHeight = 1.5F;
-    [SerializeField] protected float spawnDistance = 0.5F;
-
-    public Collider GetCollider() { return _characterController; }
+    //public Collider GetCollider() { return _characterController; }
 
     private void OnDrawGizmos()
     {
@@ -42,7 +43,7 @@ public class Character : MonoBehaviour, ITargetable
 
     protected virtual void Update()
     {
-        //Nothing yet...
+        //UpdateStatusList();
     }
 
     protected virtual void FixedUpdate()
@@ -126,6 +127,10 @@ public class Character : MonoBehaviour, ITargetable
     }
     #endregion
 
+    #region Statuses
+    public Statuses GetStatuses() { return statuses; }
+    #endregion
+
     #region Physics
     public void ReceiveImpact(Vector3 impact)
     {
@@ -142,16 +147,16 @@ public class Character : MonoBehaviour, ITargetable
     public void SpawnProjectile(Projectile projectile, GameObject targetObj)
     {
         Vector3 pos = transform.position;
-        pos += transform.forward * spawnDistance;
-        pos.y += spawnHeight;
+        pos += transform.forward * projSpawnDistance;
+        pos.y += projSpawnHeight;
         Quaternion rot = transform.rotation;
         Projectile proj = Instantiate(projectile, pos, rot);
-        proj.Initialize(this, targetObj);
+        proj.Initialize(gameObject, targetObj);
     }
     public void SpawnCharacter(Character character)
     {
         Vector3 pos = transform.position;
-        pos += transform.forward * spawnDistance * 2F;
+        pos += transform.forward * projSpawnDistance * 2F;
         Quaternion rot = transform.rotation;
         Character chara = Instantiate(character, pos, rot);
         //chara.Initialize(this, null);

@@ -23,6 +23,7 @@ public class SeekerProjectile : Projectile
 
     private void Seek()
     {
+        if (homingSpeed <= 0) return;
         if (homingTarget != null) return;
         Collider[] colliders = Physics.OverlapSphere(transform.position, seekRange);
         foreach (Collider forCol in colliders)

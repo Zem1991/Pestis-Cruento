@@ -1,11 +1,20 @@
-﻿public static class Helper
+﻿using UnityEngine;
+
+public static class Helper
 {
-    public static bool IsAngleWithinArc(float angle, float arcStart, float arcEnd)
+    public static float RoundToMultiple(float value, float multipleOf)
     {
-        float startToEnd = arcEnd - arcStart;
-        float startToAngle = angle - arcStart;
-        arcEnd = startToEnd < 0 ? startToEnd + 360 : startToEnd;
-        angle = startToAngle < 0 ? startToAngle + 360 : startToAngle;
-        return angle <= arcEnd;
+        return Mathf.Round(value / multipleOf) * multipleOf;
+    }
+
+    public static Vector3 RoundToMultiple(Vector3 value, float multipleOf)
+    {
+        Vector3 result = new Vector3
+        {
+            x = RoundToMultiple(value.x, multipleOf),
+            y = RoundToMultiple(value.y, multipleOf),
+            z = RoundToMultiple(value.z, multipleOf)
+        };
+        return result;
     }
 }

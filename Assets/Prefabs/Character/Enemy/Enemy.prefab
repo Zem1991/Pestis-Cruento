@@ -1,5 +1,49 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2878585729050790485
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1174860538102682438}
+  - component: {fileID: 8875664074299869729}
+  m_Layer: 0
+  m_Name: Statuses
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1174860538102682438
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2878585729050790485}
+  m_LocalRotation: {x: -0, y: -0.9238796, z: -0, w: -0.38268325}
+  m_LocalPosition: {x: -21.213196, y: 0, z: 21.213211}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5507573797517214491}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8875664074299869729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2878585729050790485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc3fbbc75d661d249b65d8fbc94d3c4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  statusList: []
 --- !u!1 &5507573796628035242
 GameObject:
   m_ObjectHideFlags: 0
@@ -119,6 +163,7 @@ Transform:
   m_Children:
   - {fileID: 9127112999161881164}
   - {fileID: 5507573797500454328}
+  - {fileID: 1174860538102682438}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 225, z: 0}
@@ -159,11 +204,13 @@ MonoBehaviour:
   maximumHealth: 100
   movementSpeed: 8
   attack: {fileID: 8765456619065679910}
+  projSpawnHeight: 1.5
+  projSpawnDistance: 0.5
+  statuses: {fileID: 8875664074299869729}
   movement: {x: 0, y: 0, z: 0}
   impact: {x: 0, y: 0, z: 0}
   mass: 85
-  spawnHeight: 1.5
-  spawnDistance: 0.5
+  deflectionArc: 0
 --- !u!114 &5507573797517214495
 MonoBehaviour:
   m_ObjectHideFlags: 0

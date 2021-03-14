@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : AbstractSingleton<Player>
 {
     [Header("Self references")]
     [SerializeField] private PlayerCamera playerCamera;
@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
 
     [Header("Other references")]
     [SerializeField] private InputHandler inputHandler;
+
     [SerializeField] private UIHandler uiHandler;
 
     [Header("Character")]
@@ -47,6 +48,7 @@ public class Player : MonoBehaviour
         CallManualUIUpdate();
     }
 
+    #region Update methods
     private void Interaction()
     {
         bool interaction = inputHandler.Interaction();
@@ -181,4 +183,13 @@ public class Player : MonoBehaviour
         MainCharacter mainChar = mainCharacter == currentCharacter ? mainCharacter : null;
         uiHandler.ManualUpdatePlayer(mainChar);
     }
+    #endregion
+
+    #region Character
+    public bool ChangeCharacter(Character target)
+    {
+        currentCharacter = target;
+        return true;
+    }
+    #endregion
 }

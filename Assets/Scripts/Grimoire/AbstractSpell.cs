@@ -8,6 +8,9 @@ public abstract class AbstractSpell : MonoBehaviour
     [SerializeField] private string spellName;
     [SerializeField] private Sprite spellSprite;
 
+    [Header("Search")]
+    [SerializeField] private EffectSearch effectSearch;
+
     [Header("Casting")]
     [SerializeField] private bool castOnSelf;
     [SerializeField] private int manaCost;
@@ -51,6 +54,7 @@ public abstract class AbstractSpell : MonoBehaviour
     public virtual bool CanCast(MainCharacter caster, Vector3 targetPos, GameObject targetObj)
     {
         if (!CanPayManaCost(caster)) return false;
+        if (effectSearch && !effectSearch.Search(caster, targetPos, targetObj)) return false;
         return true;
     }
 

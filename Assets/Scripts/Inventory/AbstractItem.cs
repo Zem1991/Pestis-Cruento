@@ -8,6 +8,9 @@ public abstract class AbstractItem : MonoBehaviour
     [SerializeField] private string itemName;
     [SerializeField] private Sprite itemSprite;
 
+    [Header("Search")]
+    [SerializeField] private EffectSearch effectSearch;
+
     [Header("Utilization")]
     [SerializeField] private bool useOnSelf;
     [SerializeField] private int currentAmount;
@@ -60,6 +63,7 @@ public abstract class AbstractItem : MonoBehaviour
     public virtual bool CanUse(MainCharacter user, Vector3 targetPos, GameObject targetObj)
     {
         if (!CanDecreaseAmount()) return false;
+        if (effectSearch && !effectSearch.Search(user, targetPos, targetObj)) return false;
         return true;
     }
 

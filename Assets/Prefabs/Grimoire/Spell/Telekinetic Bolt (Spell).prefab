@@ -45,9 +45,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spellName: Telekinetic Bolt
   spellSprite: {fileID: 21300000, guid: 332347f05b5e56345929a54dd48e9762, type: 3}
+  effectSearch: {fileID: 0}
   castOnSelf: 0
-  manaCost: 20
+  manaCost: 10
   startDuration: 0.3
-  endDuration: 0.2
+  endDuration: 0.1
   projectile: {fileID: 317995165129285855, guid: ec821675a0b528b4d9d4053cff6451d0,
     type: 3}

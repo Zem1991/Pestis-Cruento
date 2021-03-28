@@ -49,9 +49,9 @@ MonoBehaviour:
   spellSprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   effectSearch: {fileID: 931802079494469770}
   castOnSelf: 0
-  manaCost: 65
-  startDuration: 0.5
-  endDuration: 0.1
+  manaCost: 50
+  startDuration: 0.8
+  endDuration: 0.2
   effect: {fileID: -5534618925164822267}
 --- !u!114 &-5534618925164822267
 MonoBehaviour:

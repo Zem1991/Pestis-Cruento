@@ -46,8 +46,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spellName: Repel
   spellSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  effectSearch: {fileID: 0}
   castOnSelf: 1
-  manaCost: 50
+  manaCost: 35
   startDuration: 0.4
   endDuration: 0.2
   effect: {fileID: -8225177154470676435}

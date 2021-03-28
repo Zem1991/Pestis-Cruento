@@ -7,6 +7,7 @@ public partial class Character : MonoBehaviour, ITargetable
 {
     [Header("Self references")]
     [SerializeField] private CharacterController _characterController;
+    [SerializeField] private Animator _animator;
 
     [Header("Identification")]
     [SerializeField] protected string characterName = "Unknown Character";
@@ -72,7 +73,14 @@ public partial class Character : MonoBehaviour, ITargetable
         currentHealth -= amount;
         //TODO: will use negative health to check for gibbing
         //if (currentHealth < 0) currentHealth = 0;
-        return CheckNoHealth();
+        bool isDead = CheckNoHealth();
+
+        if (_animator)
+        {
+            _animator.SetBool("Is Dead", isDead);
+            _animator.SetTrigger("Hurt");
+        }
+        return isDead;
     }
     public bool CheckNoHealth() { return currentHealth <= 0; }
     public bool GainHealth(int amount)
@@ -83,6 +91,11 @@ public partial class Character : MonoBehaviour, ITargetable
         return CheckFullHealth();
     }
     public bool CheckFullHealth() { return currentHealth >= maximumHealth; }
+    public void Die()
+    {
+        Debug.LogWarning("Die() was called for character " + characterName);
+        LoseHealth(currentHealth);
+    }
     #endregion
 
     #region Movement
@@ -111,6 +124,10 @@ public partial class Character : MonoBehaviour, ITargetable
         Vector3 speed = movement + impact;
         speed *= Time.fixedDeltaTime;
         _characterController.Move(speed);
+
+        if (!_animator) return;
+        bool animatorInMovement = speed != Vector3.zero;
+        _animator.SetBool("In Movement", animatorInMovement);
     }
     #endregion
 
@@ -124,6 +141,9 @@ public partial class Character : MonoBehaviour, ITargetable
     {
         if (!CanAttack()) return;
         attack.StartAttack();
+
+        if (!_animator) return;
+        _animator.SetTrigger("Attack");
     }
     #endregion
 

@@ -198,6 +198,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _characterController: {fileID: 5507573797517214492}
+  _animator: {fileID: 0}
   characterName: Unknown Character
   allegiance: 2
   currentHealth: 100
@@ -224,7 +225,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   character: {fileID: 5507573797517214493}
-  sightRange: 15
+  sightRange: 8
   sightRadius: 120
   foundCharacter: {fileID: 0}
 --- !u!1 &5507573797788191984

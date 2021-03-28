@@ -60,14 +60,14 @@ public class Player : AbstractSingleton<Player>
 
     private void Inventory()
     {
-        if (currentCharacter != mainCharacter) return;
-
         bool nextItem = inputHandler.NextItem();
         bool prevItem = inputHandler.PreviousItem();
         bool useItem = inputHandler.UseItem();
 
         if (nextItem || prevItem)
         {
+            if (!IsControllingMainCharacter()) return;
+
             if (nextItem) mainCharacter.NextItem();
             else mainCharacter.PreviousItem();
 
@@ -78,6 +78,9 @@ public class Player : AbstractSingleton<Player>
         }
         else if (useItem)
         {
+            //If we are controlling something different, we instead change it back to the main character.
+            if (ResetCharacter()) return;
+
             InputCursor inputCursor = inputHandler.GetInputCursor();
             Vector3 targetPos = inputCursor.GetCurrentPosScene();
             GameObject targetObj = inputCursor.GetFoundTargetable();
@@ -87,14 +90,14 @@ public class Player : AbstractSingleton<Player>
 
     private void Grimoire()
     {
-        if (currentCharacter != mainCharacter) return;
-
         bool nextSpell = inputHandler.NextSpell();
         bool prevSpell = inputHandler.PreviousSpell();
         bool castSpell = inputHandler.CastSpell();
 
         if (nextSpell || prevSpell)
         {
+            if (!IsControllingMainCharacter()) return;
+
             if (nextSpell) mainCharacter.NextSpell();
             else mainCharacter.PreviousSpell();
 
@@ -105,6 +108,9 @@ public class Player : AbstractSingleton<Player>
         }
         else if (castSpell)
         {
+            //If we are controlling something different, we instead change it back to the main character.
+            if (ResetCharacter()) return;
+
             InputCursor inputCursor = inputHandler.GetInputCursor();
             Vector3 targetPos = inputCursor.GetCurrentPosScene();
             GameObject targetObj = inputCursor.GetFoundTargetable();
@@ -180,16 +186,27 @@ public class Player : AbstractSingleton<Player>
 
     private void CallManualUIUpdate()
     {
-        MainCharacter mainChar = mainCharacter == currentCharacter ? mainCharacter : null;
+        MainCharacter mainChar = IsControllingMainCharacter() ? mainCharacter : null;
         uiHandler.ManualUpdatePlayer(mainChar);
     }
     #endregion
 
     #region Character
+    public bool IsControllingMainCharacter() { return currentCharacter == mainCharacter; }
     public bool ChangeCharacter(Character target)
     {
         currentCharacter = target;
         return true;
+    }
+    public bool ResetCharacter()
+    {
+        if (!IsControllingMainCharacter())
+        {
+            currentCharacter.Die();
+            currentCharacter = mainCharacter;
+            return true;
+        }
+        return false;
     }
     #endregion
 }

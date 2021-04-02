@@ -11,7 +11,7 @@ public class SeekerProjectile : Projectile
     protected override void OnDrawGizmos()
     {
         base.OnDrawGizmos();
-        Gizmos.color = Color.red;
+        Gizmos.color = GizmoColors.projectileSeekRange;
         Gizmos.DrawWireSphere(transform.position, seekRange);
     }
 

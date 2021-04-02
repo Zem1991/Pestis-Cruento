@@ -14,6 +14,7 @@ public partial class Character : MonoBehaviour, ITargetable
     [SerializeField] protected Allegiance allegiance = Allegiance.ENEMY;
 
     [Header("Health")]
+    [SerializeField] protected bool isDead = false;
     [SerializeField] protected int currentHealth = 100;
     [SerializeField] protected int maximumHealth = 100;
 
@@ -38,7 +39,7 @@ public partial class Character : MonoBehaviour, ITargetable
     private void OnDrawGizmos()
     {
         Vector3 position = GetTargetablePosition();
-        Gizmos.color = Color.cyan;
+        Gizmos.color = GizmoColors.targetablePosition;
         Gizmos.DrawWireSphere(position, 0.25F);
     }
 
@@ -72,9 +73,13 @@ public partial class Character : MonoBehaviour, ITargetable
         if (amount < 0) amount = 0;
         currentHealth -= amount;
         //TODO: will use negative health to check for gibbing
-        //if (currentHealth < 0) currentHealth = 0;
-        bool isDead = CheckNoHealth();
+        if (isDead) return true;
 
+        isDead = CheckNoHealth();
+        if (isDead)
+        {
+            _characterController.enabled = false;
+        }
         if (_animator)
         {
             _animator.SetBool("Is Dead", isDead);

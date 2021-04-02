@@ -24,8 +24,8 @@ public class Attack : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Color color = IsAttacking() ? Color.red : Color.white;
-        if (attackHit) color = Color.magenta;
+        Color color = IsAttacking() ? GizmoColors.attackActive : GizmoColors.attackInactive;
+        if (attackHit) color = GizmoColors.attackHit;
         Gizmos.color = color;
         Gizmos.DrawWireSphere(attackPosition, hitRadius);
     }

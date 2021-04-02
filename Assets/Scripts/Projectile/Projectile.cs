@@ -36,12 +36,10 @@ public class Projectile : MonoBehaviour
 
     protected virtual void OnDrawGizmos()
     {
-        if (homingTarget != null)
+        if (HasGuidance())
         {
-            Color homingColor = HasGuidance() ? Color.cyan : Color.blue;
-            homingColor.b = 0.5F;
             Vector3 position = homingTarget.GetTargetablePosition();
-            Gizmos.color = homingColor;
+            Gizmos.color = GizmoColors.projectileTarget;
             Gizmos.DrawLine(transform.position, position);
         }
     }

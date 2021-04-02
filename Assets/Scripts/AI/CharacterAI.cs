@@ -18,8 +18,7 @@ public class CharacterAI : MonoBehaviour
     {
         Vector3 position = transform.position;
         
-        Color color = new Color(1, .5F, 0, 1);
-        Gizmos.color = color;
+        Gizmos.color = GizmoColors.detectionSightRange;
         Gizmos.DrawWireSphere(position, sightRange);
 
         float halfSightRadius = sightRadius / 2F;
@@ -27,15 +26,14 @@ public class CharacterAI : MonoBehaviour
         Vector3 fovLeftPos = Quaternion.Euler(0, -halfSightRadius, 0) * fovMidPos;
         Vector3 fovRightPos = Quaternion.Euler(0, halfSightRadius, 0) * fovMidPos;
         
-        color.g = 1;
-        Gizmos.color = color;
+        Gizmos.color = GizmoColors.detectionSightArc;
         Gizmos.DrawLine(position, position + fovMidPos);
         Gizmos.DrawLine(position, position + fovLeftPos);
         Gizmos.DrawLine(position, position + fovRightPos);
 
         if (foundCharacter)
         {
-            Gizmos.color = Color.red;
+            Gizmos.color = GizmoColors.detectionTarget;
             Gizmos.DrawLine(position, foundCharacter.transform.position);
         }
     }

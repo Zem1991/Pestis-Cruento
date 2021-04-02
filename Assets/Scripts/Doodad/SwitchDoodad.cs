@@ -16,7 +16,7 @@ public class SwitchDoodad : Doodad, ITargetable, IInteractionTarget, ITelekinesi
     private void OnDrawGizmos()
     {
         Vector3 position = GetTargetablePosition();
-        Gizmos.color = Color.cyan;
+        Gizmos.color = GizmoColors.targetablePosition;
         Gizmos.DrawWireSphere(position, 0.25F);
     }
 

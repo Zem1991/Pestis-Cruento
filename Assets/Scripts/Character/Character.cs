@@ -7,6 +7,7 @@ public partial class Character : MonoBehaviour, ITargetable
 {
     [Header("Self references")]
     [SerializeField] private CharacterController _characterController;
+    //[SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private Animator _animator;
 
     [Header("Identification")]
@@ -76,10 +77,8 @@ public partial class Character : MonoBehaviour, ITargetable
         if (isDead) return true;
 
         isDead = CheckNoHealth();
-        if (isDead)
-        {
-            _characterController.enabled = false;
-        }
+        if (_characterController) _characterController.detectCollisions = !isDead;
+
         if (_animator)
         {
             _animator.SetBool("Is Dead", isDead);
@@ -124,14 +123,28 @@ public partial class Character : MonoBehaviour, ITargetable
             transform.LookAt(lookTarget);
         }
     }
+    public void Rotation(Vector3 lookAtPosition)
+    {
+        Vector3 dirToCursor = lookAtPosition - transform.position;
+        dirToCursor.y = 0;
+        transform.rotation = Quaternion.LookRotation(dirToCursor);
+    }
     private void ActualMovement()
     {
-        Vector3 speed = movement + impact;
-        speed *= Time.fixedDeltaTime;
-        _characterController.Move(speed);
+        if (_characterController && _characterController.enabled)
+        {
+            Vector3 ccSpeed = movement + impact;
+            ccSpeed *= Time.fixedDeltaTime;
+            _characterController.Move(ccSpeed);
+        }
+        //else if (_rigidbody)
+        //{
+        //    Vector3 rbSpeed = movement * Time.fixedDeltaTime;
+        //    _rigidbody.MovePosition(_rigidbody.position + rbSpeed);
+        //}
 
         if (!_animator) return;
-        bool animatorInMovement = speed != Vector3.zero;
+        bool animatorInMovement = movement != Vector3.zero;
         _animator.SetBool("In Movement", animatorInMovement);
     }
     #endregion
@@ -157,9 +170,21 @@ public partial class Character : MonoBehaviour, ITargetable
     #endregion
 
     #region Physics
-    public void ReceiveImpact(Vector3 impact)
+    public void ReceiveImpact(float impactForce, Vector3 impactPosition, float impactRadius)
+    //public void ReceiveImpact(Vector3 impact)
     {
-        this.impact += impact / mass;
+        if (_characterController && _characterController.enabled)
+        {
+            Vector3 hitPos = GetTargetablePosition();
+            float dist = Vector3.Distance(hitPos, impactPosition);
+            float ratio = Mathf.InverseLerp(impactRadius, 0, dist);
+            Vector3 impact = (hitPos - impactPosition).normalized;
+            this.impact += impact * impactForce * ratio / mass;
+        }
+        //else if (_rigidbody)
+        //{
+        //    _rigidbody.AddExplosionForce(impactForce, impactPosition, impactRadius, 0F, ForceMode.Impulse);
+        //}
     }
     private void AbsorbImpact()
     {

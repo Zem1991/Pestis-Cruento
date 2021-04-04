@@ -13,7 +13,7 @@ public class InputHandler : MonoBehaviour
         inputCursor.ReadCursor(Camera.main);
     }
 
-    #region Cursor
+    #region Self references
     public InputCursor GetInputCursor() { return inputCursor; }
     #endregion
 

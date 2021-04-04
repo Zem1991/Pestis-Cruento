@@ -12,7 +12,6 @@ public class Player : AbstractSingleton<Player>
 
     [Header("Other references")]
     [SerializeField] private InputHandler inputHandler;
-
     [SerializeField] private UIHandler uiHandler;
 
     [Header("Character")]
@@ -40,6 +39,7 @@ public class Player : AbstractSingleton<Player>
         Combat();
 
         Movement();
+        Rotation();
         Camera();
 
         SeekInteractionTarget();
@@ -127,11 +127,25 @@ public class Player : AbstractSingleton<Player>
     private void Movement()
     {
         Vector3 cameraRotationEuler = playerCamera.transform.rotation.eulerAngles;
-        Quaternion rotationAdjustment = Quaternion.Euler(0, cameraRotationEuler.y, 0);
-
+        Quaternion dirAdjustmentRot = Quaternion.Euler(0, cameraRotationEuler.y, 0);
+        
         Vector3 direction = inputHandler.Movement();
-        direction = rotationAdjustment * direction;
+        direction = dirAdjustmentRot * direction;
+
         currentCharacter.Movement(direction);
+    }
+
+    private void Rotation()
+    {
+        InputCursor inputCursor = inputHandler.GetInputCursor();
+        Plane xzPlane = new Plane(transform.up, transform.position.y);
+        Ray ray = inputCursor.GetScreenCursorRay();
+        bool success = xzPlane.Raycast(ray, out float enter);
+        if (success)
+        {
+            Vector3 lookPos = ray.GetPoint(enter);
+            currentCharacter.Rotation(lookPos);
+        }
     }
 
     private void Camera()

@@ -19,9 +19,10 @@ public class TelekinesisEffect : AbstractEffect
         Character targetChar = targetObj.GetComponent<Character>();
         if (targetChar)
         {
-            Vector3 direction = (targetChar.transform.position - targetPos).normalized;
-            Vector3 impact = direction * strength;
-            targetChar.ReceiveImpact(impact);
+            //Vector3 direction = (targetChar.transform.position - targetPos).normalized;
+            //Vector3 impact = direction * strength;
+            //targetChar.ReceiveImpact(impact);
+            targetChar.ReceiveImpact(strength, targetPos, 0);
             return true;
         }
         

@@ -197,9 +197,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _characterController: {fileID: 5507573797517214492}
+  _rigidbody: {fileID: 0}
   _animator: {fileID: 8521952183334005204}
   characterName: Test Enemy
   allegiance: 2
+  isDead: 0
   currentHealth: 100
   maximumHealth: 100
   movementSpeed: 8
@@ -209,7 +211,7 @@ MonoBehaviour:
   statuses: {fileID: 8875664074299869729}
   movement: {x: 0, y: 0, z: 0}
   impact: {x: 0, y: 0, z: 0}
-  mass: 85
+  mass: 50
   deflectionArc: 0
 --- !u!114 &5507573797517214495
 MonoBehaviour:
@@ -224,7 +226,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   character: {fileID: 5507573797517214493}
-  sightRange: 8
+  _nmAgent: {fileID: 0}
+  sightRange: 1
   sightRadius: 120
   foundCharacter: {fileID: 0}
 --- !u!1 &6920279283064947402

@@ -5,35 +5,42 @@ using UnityEngine;
 public class ExplosionEffect : AbstractEffect
 {
     [Header("Settings")]
-    [SerializeField] private int radius;
-    [SerializeField] private int damage;
     [SerializeField] private float strength;
+    [SerializeField] private float radius;
+    [SerializeField] private float upwardsModifier;
+    [SerializeField] private int damage;
 
     public override bool ExecuteEffect(Character caster, Vector3 targetPos, GameObject targetObj)
     {
+        Vector3 explosionCenter = transform.position;
+
         Collider[] colliders = Physics.OverlapSphere(targetPos, radius);
         foreach (Collider forColl in colliders)
         {
+            //Ignore self.
+            if (forColl.gameObject == gameObject) continue;
+
+            Vector3 targetCenter = forColl.transform.position;
             Character forChar = forColl.GetComponent<Character>();
+            Rigidbody forRB = forColl.GetComponent<Rigidbody>();
+
+            if (forChar)
+            {
+                targetCenter = forChar.GetTargetablePosition();
+                forChar.ReceiveImpact(strength, explosionCenter, radius);
+            }
+            else if (forRB)
+            {
+                forRB.AddExplosionForce(strength, explosionCenter, radius, upwardsModifier, ForceMode.Impulse);
+            }
+
+            //Ignore the rest if damage means nothing.
             if (!forChar) continue;
 
-            Vector3 forCharPos = forChar.transform.position + forChar.GetTargetablePosition();
-            float distance = Vector3.Distance(forCharPos, targetPos);
-            float distanceFactor = (radius - distance) / radius;
-            if (distanceFactor < 0) distanceFactor = 0;
-
-            float damageFloat = damage * distanceFactor;
-            int damageInt = Mathf.RoundToInt(damageFloat);
-
-            Vector3 direction = (forCharPos - targetPos).normalized;
-            float strengthAdjusted = strength * distanceFactor;
-            Vector3 impact = direction * strengthAdjusted;
-
-            //Debug.Log("distanceFactor: " + distanceFactor);
-            //Debug.Log("impact.magnitude: " + impact.magnitude);
-
-            forChar.LoseHealth(damageInt);
-            forChar.ReceiveImpact(impact);
+            float dist = Vector3.Distance(targetPos, targetCenter);
+            float ratio = Mathf.InverseLerp(radius, 0, dist);
+            int impactDamage = (int)(ratio * damage);
+            forChar.LoseHealth(impactDamage);
         }
         return true;
     }

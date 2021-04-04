@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class CharacterAI : MonoBehaviour
 {
     [Header("Character")]
     [SerializeField] private Character character;
+    [SerializeField] private NavMeshAgent _nmAgent;
 
     [Header("Detection settings")]
     [SerializeField] private float sightRange = 15F;
@@ -41,7 +43,16 @@ public class CharacterAI : MonoBehaviour
     private void Update()
     {
         bool hasTarget = CheckDetection(foundCharacter);
-        if (!hasTarget) PerformDetection();
+        if (!hasTarget)
+        {
+            PerformDetection();
+        }
+        else if (_nmAgent)
+        {
+            Vector3 targetPos = foundCharacter.transform.position;
+            _nmAgent.stoppingDistance = 2.5F;
+            _nmAgent.SetDestination(targetPos);
+        }
     }
 
     private bool CheckDetection(Character character)

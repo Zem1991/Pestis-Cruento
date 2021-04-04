@@ -251,6 +251,7 @@ MonoBehaviour:
   _animator: {fileID: 8928227144734614950}
   characterName: Main Character
   allegiance: 1
+  isDead: 0
   currentHealth: 100
   maximumHealth: 100
   movementSpeed: 10
@@ -362,11 +363,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: brute
       objectReference: {fileID: 0}
-    - target: {fileID: -6057140222963153312, guid: 82c499bb238672247b40461ba5ed1286,
-        type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 83ffb74567a5d5c41a328e592c9457fb, type: 2}
     - target: {fileID: -4216859302048453862, guid: 82c499bb238672247b40461ba5ed1286,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -437,6 +433,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.8
       objectReference: {fileID: 0}
+    - target: {fileID: -6057140222963153312, guid: 82c499bb238672247b40461ba5ed1286,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 83ffb74567a5d5c41a328e592c9457fb, type: 2}
     - target: {fileID: 6625656518741718837, guid: 82c499bb238672247b40461ba5ed1286,
         type: 3}
       propertyPath: m_Materials.Array.data[0]

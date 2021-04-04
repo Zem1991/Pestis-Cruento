@@ -131,8 +131,8 @@ MonoBehaviour:
   homingSpeed: 0
   durationMax: 10
   effect: {fileID: 7114658546378344108}
-  owner: {fileID: 0}
-  homingTarget: {fileID: 0}
+  spawner: {fileID: 0}
+  homingTargetObj: {fileID: 0}
   durationCurrent: 0
 --- !u!114 &7114658546378344108
 MonoBehaviour:
@@ -146,9 +146,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76bc2d7354a3e8b4d8127fc43f581c81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  strength: 4000
   radius: 5
+  upwardsModifier: 1
   damage: 100
-  strength: 5000
 --- !u!1 &2567797451013302822
 GameObject:
   m_ObjectHideFlags: 0

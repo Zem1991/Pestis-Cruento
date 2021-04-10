@@ -8623,7 +8623,6 @@ MonoBehaviour:
   cursorProjector: {fileID: 1742886531}
   inputHandler: {fileID: 1322840633}
   uiHandler: {fileID: 605440062}
-  useCameraMovement: 1
   mainCharacter: {fileID: 1175567000}
   currentCharacter: {fileID: 0}
   interactionRange: 1
@@ -10485,7 +10484,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1347458557}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -3}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 190414979}

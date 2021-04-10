@@ -38,8 +38,8 @@ public class Player : AbstractSingleton<Player>
         Grimoire();
         Combat();
 
-        Movement();
         Rotation();
+        Movement();
         Camera();
 
         SeekInteractionTarget();
@@ -124,17 +124,6 @@ public class Player : AbstractSingleton<Player>
         if (attack) currentCharacter.Attack();
     }
 
-    private void Movement()
-    {
-        Vector3 cameraRotationEuler = playerCamera.transform.rotation.eulerAngles;
-        Quaternion dirAdjustmentRot = Quaternion.Euler(0, cameraRotationEuler.y, 0);
-        
-        Vector3 direction = inputHandler.Movement();
-        direction = dirAdjustmentRot * direction;
-
-        currentCharacter.Movement(direction);
-    }
-
     private void Rotation()
     {
         InputCursor inputCursor = inputHandler.GetInputCursor();
@@ -146,6 +135,17 @@ public class Player : AbstractSingleton<Player>
             Vector3 lookPos = ray.GetPoint(enter);
             currentCharacter.Rotation(lookPos);
         }
+    }
+
+    private void Movement()
+    {
+        Vector3 cameraRotationEuler = playerCamera.transform.rotation.eulerAngles;
+        Quaternion dirAdjustmentRot = Quaternion.Euler(0, cameraRotationEuler.y, 0);
+        
+        Vector3 direction = inputHandler.Movement();
+        direction = dirAdjustmentRot * direction;
+
+        currentCharacter.Movement(direction);
     }
 
     private void Camera()

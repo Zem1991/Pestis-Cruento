@@ -4,6 +4,9 @@ using UnityEngine;
 
 public static class GizmoColors
 {
+    //Movement
+    public static readonly Color movementPath = new Color(0F, 1F, 0F, 1F);
+
     //Targeting
     public static readonly Color targetablePosition = new Color(0F, 1F, 1F, 1F);
 

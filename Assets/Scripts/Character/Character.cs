@@ -19,7 +19,7 @@ public partial class Character : MonoBehaviour, ITargetable
     [SerializeField] protected int currentHealth = 100;
     [SerializeField] protected int maximumHealth = 100;
 
-    [Header("Movement")]
+    [Header("Rotation and Movement")]
     [SerializeField] protected float movementSpeed = 8F;
     
     [Header("Combat")]
@@ -102,32 +102,40 @@ public partial class Character : MonoBehaviour, ITargetable
     }
     #endregion
 
-    #region Movement
+    #region Rotation and Movement
     public virtual bool CanMove()
     {
         bool checkAttack = !attack || !attack.IsAttacking();
         return checkAttack;
+    }
+    public void Rotation(Vector3 lookAtPosition)
+    {
+        Vector3 myPos = transform.position;
+        Vector3 dirToCursor = lookAtPosition - myPos;
+        dirToCursor.y = myPos.y;
+        transform.rotation = Quaternion.LookRotation(dirToCursor);
     }
     public void Movement(Vector3 direction)
     {
         movement = Vector3.zero;
         if (!CanMove()) return;
 
-        movement = direction.normalized;
-        movement *= movementSpeed;
+        if (direction.magnitude > 1) direction.Normalize();
+        movement = direction * movementSpeed;
         //_characterController.SimpleMove(movement);
 
-        if (movement != Vector3.zero)
-        {
-            Vector3 lookTarget = transform.position + movement;
-            transform.LookAt(lookTarget);
-        }
-    }
-    public void Rotation(Vector3 lookAtPosition)
-    {
-        Vector3 dirToCursor = lookAtPosition - transform.position;
-        dirToCursor.y = 0;
-        transform.rotation = Quaternion.LookRotation(dirToCursor);
+        if (!_animator) return;
+        float rotEulerY = transform.rotation.eulerAngles.y;
+        direction = Quaternion.Euler(0, -rotEulerY, 0) * direction;
+
+        Vector3 animatorSpeed = direction;
+        ////TODO: I'm not sure if these are right.
+        //animatorSpeed.x = Helper.RoundToMultiple(animatorSpeed.x, 1F);
+        //animatorSpeed.z = Helper.RoundToMultiple(animatorSpeed.z, 1F);
+
+        animatorSpeed.Normalize();
+        _animator.SetFloat("Speed X", animatorSpeed.x);
+        _animator.SetFloat("Speed Z", animatorSpeed.z);
     }
     private void ActualMovement()
     {

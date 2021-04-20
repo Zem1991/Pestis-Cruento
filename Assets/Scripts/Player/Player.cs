@@ -129,6 +129,8 @@ public class Player : AbstractSingleton<Player>
         InputCursor inputCursor = inputHandler.GetInputCursor();
         Plane xzPlane = new Plane(transform.up, transform.position.y);
         Ray ray = inputCursor.GetScreenCursorRay();
+
+        //TODO: have something more ready to use inside InputCursor/InputHandler.
         bool success = xzPlane.Raycast(ray, out float enter);
         if (success)
         {

@@ -111,9 +111,11 @@ public partial class Character : MonoBehaviour, ITargetable
     public void Rotation(Vector3 lookAtPosition)
     {
         Vector3 myPos = transform.position;
-        Vector3 dirToCursor = lookAtPosition - myPos;
-        dirToCursor.y = myPos.y;
-        transform.rotation = Quaternion.LookRotation(dirToCursor);
+        lookAtPosition.y = myPos.y;
+        Vector3 direction = lookAtPosition - myPos;
+        direction.Normalize();
+        if (direction == Vector3.zero) return;
+        transform.rotation = Quaternion.LookRotation(direction);
     }
     public void Movement(Vector3 direction)
     {

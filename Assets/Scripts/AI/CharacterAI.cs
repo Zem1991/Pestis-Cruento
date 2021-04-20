@@ -7,20 +7,21 @@ public class CharacterAI : MonoBehaviour
 {
     [Header("Self references")]
     [SerializeField] private Character character;
-    [SerializeField] private NavMeshAgent _nmAgent;
+    //[SerializeField] private NavMeshAgent _nmAgent;
 
     [Header("Detection settings")]
     [SerializeField] private float sightRange = 15F;
     [SerializeField] private float sightRadius = 120F;
 
-    [Header("Detection findings")]
-    [SerializeField] private Ray foundCharacterRay;
-    [SerializeField] private Character foundCharacter;
+    [Header("Detection results")]
+    [SerializeField] private Character detectedCharacter;
+    [SerializeField] private Vector3 detectedCharacterPos;
 
     [Header("Pathfinding")]
     [SerializeField] private bool hasNavPath;
-    [SerializeField] private Vector3 navTargetPos;
     [SerializeField] private NavMeshPath navPath;
+    [SerializeField] private Vector3 navPathFirstPos;
+    [SerializeField] private Vector3 navPathFinalPos;
 
     private void OnDrawGizmos()
     {
@@ -39,53 +40,75 @@ public class CharacterAI : MonoBehaviour
         Gizmos.DrawLine(myPos, myPos + fovLeftPos);
         Gizmos.DrawLine(myPos, myPos + fovRightPos);
 
-        if (foundCharacter)
+        if (detectedCharacter)
         {
             Gizmos.color = GizmoColors.detectionTarget;
-            Gizmos.DrawRay(foundCharacterRay);
-            //Gizmos.DrawLine(myPos, foundCharacter.transform.position);
+            Gizmos.DrawLine(myPos, detectedCharacterPos);
         }
 
         if (hasNavPath)
         {
             Gizmos.color = GizmoColors.movementPath;
-            Gizmos.DrawLine(myPos, navTargetPos);
+            Vector3[] corners = navPath.corners;
+            Vector3 fromPos = myPos;
+            Vector3 toPos;
+            for (int index = 0; index < corners.Length; index++)
+            {
+                toPos = corners[index];
+                Gizmos.DrawLine(fromPos, toPos);
+                fromPos = toPos;
+            }
         }
     }
 
     private void Awake()
     {
         navPath = new NavMeshPath();
+
+        Vector3 myPos = transform.position;
+        navPathFirstPos = myPos;
+        navPathFinalPos = myPos;
     }
 
     private void Update()
     {
-        bool hasTarget = CheckDetection(foundCharacter);
-        if (!hasTarget)
+        Vector3 myPos = transform.position;
+
+        bool hasTarget = PerformDetection();
+        if (hasTarget) navPathFinalPos = detectedCharacterPos;
+
+        Vector3 targetPos = navPathFinalPos;
+        hasNavPath = NavMesh.CalculatePath(myPos, targetPos, NavMesh.AllAreas, navPath);
+
+        if (!hasNavPath || navPathFinalPos == myPos)
         {
-            PerformDetection();
+            hasNavPath = false;
+            navPath.ClearCorners();
+            navPathFirstPos = myPos;
+            navPathFinalPos = myPos;
         }
-        else if (_nmAgent)
+        else
         {
-            Vector3 foundCharacterPos = foundCharacter.transform.position;
-            hasNavPath = _nmAgent.CalculatePath(foundCharacterPos, navPath);
+            if (navPath.corners.Length > 1) navPathFirstPos = navPath.corners[1];
 
-            if (hasNavPath)
-            {
-                Debug.Log("hasNavPath");
-                navTargetPos = navPath.corners[1];
+            Vector3 navDirection = navPathFirstPos - myPos;
+            navDirection.Normalize();
 
-                Vector3 navDirection = navTargetPos - transform.position;
-                navDirection.Normalize();
-                character.Rotation(navTargetPos);
-                character.Movement(navDirection);
-            }
+            character.Rotation(navPathFirstPos);
+            character.Movement(navDirection);
         }
     }
 
-    private bool CheckDetection(Character target)
+    #region Detection
+    public bool CheckDetection(Character target)
     {
         if (!target) return false;
+
+        Allegiance myAllegiance = character.GetAllegiance();
+        Allegiance targetAllegiance = target.GetAllegiance();
+
+        bool isEnemy = myAllegiance.CheckOpponent(targetAllegiance);
+        if (!isEnemy) return false;
 
         Vector3 rayFrom = character.GetTargetablePosition();
         Vector3 rayTo = target.GetTargetablePosition();
@@ -105,13 +128,20 @@ public class CharacterAI : MonoBehaviour
         bool sightNotBlocked = hitInfo.collider.gameObject == target.gameObject;
         if (!sightNotBlocked) return false;
 
-        foundCharacterRay = ray;
         return true;
     }
 
-    private void PerformDetection()
+    private bool PerformDetection()
     {
-        foundCharacter = null;
+        if (detectedCharacter)
+        {
+            bool keepSame = CheckDetection(detectedCharacter);
+            if (keepSame)
+            {
+                SetDetectedTarget(detectedCharacter);
+                return true;
+            }
+        }
 
         Collider[] candidates = Physics.OverlapSphere(transform.position, sightRange);
         foreach (Collider item in candidates)
@@ -125,9 +155,27 @@ public class CharacterAI : MonoBehaviour
             bool detected = CheckDetection(possibleTarget);
             if (detected)
             {
-                foundCharacter = possibleTarget;
-                break;
+                SetDetectedTarget(possibleTarget);
+                return true;
             }
         }
+
+        SetDetectedTarget(null);
+        return false;
     }
+
+    private void SetDetectedTarget(Character target)
+    {
+        if (target)
+        {
+            detectedCharacter = target;
+            detectedCharacterPos = target.transform.position;
+        }
+        else
+        {
+            detectedCharacter = null;
+            detectedCharacterPos = transform.position;
+        }
+    }
+    #endregion
 }

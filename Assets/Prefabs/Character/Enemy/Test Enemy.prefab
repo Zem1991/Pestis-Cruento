@@ -224,12 +224,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c148c7616fd8754181d25aa0d1ba974, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  calcReachableEnemy: {fileID: 0}
+  calcReachableEnemyPos: {x: 0, y: 0, z: 0}
   character: {fileID: 5507573797517214493}
+  currentDecision: 0
+  currentDecisionPos: {x: 0, y: 0, z: 0}
+  currentDecisionTarget: {fileID: 0}
+  currentDecisionStoppingDistance: 0
   sightRange: 30
   sightRadius: 120
-  foundCharacter: {fileID: 0}
+  detectedCharacterList: []
   hasNavPath: 0
-  navTargetPos: {x: 0, y: 0, z: 0}
+  navPathFirstDir: {x: 0, y: 0, z: 0}
+  navPathFirstPos: {x: 0, y: 0, z: 0}
 --- !u!1 &6920279283064947402
 GameObject:
   m_ObjectHideFlags: 0

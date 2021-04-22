@@ -135,7 +135,7 @@ public class Player : AbstractSingleton<Player>
         if (success)
         {
             Vector3 lookPos = ray.GetPoint(enter);
-            currentCharacter.Rotation(lookPos);
+            currentCharacter.SetRotation(lookPos);
         }
     }
 
@@ -147,7 +147,7 @@ public class Player : AbstractSingleton<Player>
         Vector3 direction = inputHandler.Movement();
         direction = dirAdjustmentRot * direction;
 
-        currentCharacter.Movement(direction);
+        currentCharacter.SetMovement(direction);
     }
 
     private void Camera()

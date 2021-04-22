@@ -108,7 +108,7 @@ public partial class Character : MonoBehaviour, ITargetable
         bool checkAttack = !attack || !attack.IsAttacking();
         return checkAttack;
     }
-    public void Rotation(Vector3 lookAtPosition)
+    public void SetRotation(Vector3 lookAtPosition)
     {
         Vector3 myPos = transform.position;
         lookAtPosition.y = myPos.y;
@@ -117,7 +117,7 @@ public partial class Character : MonoBehaviour, ITargetable
         if (direction == Vector3.zero) return;
         transform.rotation = Quaternion.LookRotation(direction);
     }
-    public void Movement(Vector3 direction)
+    public void SetMovement(Vector3 direction)
     {
         movement = Vector3.zero;
         if (!CanMove()) return;
@@ -144,14 +144,13 @@ public partial class Character : MonoBehaviour, ITargetable
         if (_characterController && _characterController.enabled)
         {
             Vector3 ccSpeed = movement + impact;
+            
+            //TODO: better gravity effects
+            //ccSpeed += Physics.gravity;
+
             ccSpeed *= Time.fixedDeltaTime;
             _characterController.Move(ccSpeed);
         }
-        //else if (_rigidbody)
-        //{
-        //    Vector3 rbSpeed = movement * Time.fixedDeltaTime;
-        //    _rigidbody.MovePosition(_rigidbody.position + rbSpeed);
-        //}
 
         if (!_animator) return;
         bool animatorInMovement = movement != Vector3.zero;

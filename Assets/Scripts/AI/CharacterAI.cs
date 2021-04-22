@@ -1,27 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
-public class CharacterAI : MonoBehaviour
+public partial class CharacterAI : MonoBehaviour
 {
     [Header("Self references")]
     [SerializeField] private Character character;
-    //[SerializeField] private NavMeshAgent _nmAgent;
-
-    [Header("Detection settings")]
-    [SerializeField] private float sightRange = 15F;
-    [SerializeField] private float sightRadius = 120F;
-
-    [Header("Detection results")]
-    [SerializeField] private Character detectedCharacter;
-    [SerializeField] private Vector3 detectedCharacterPos;
-
-    [Header("Pathfinding")]
-    [SerializeField] private bool hasNavPath;
-    [SerializeField] private NavMeshPath navPath;
-    [SerializeField] private Vector3 navPathFirstPos;
-    [SerializeField] private Vector3 navPathFinalPos;
 
     private void OnDrawGizmos()
     {
@@ -40,10 +24,10 @@ public class CharacterAI : MonoBehaviour
         Gizmos.DrawLine(myPos, myPos + fovLeftPos);
         Gizmos.DrawLine(myPos, myPos + fovRightPos);
 
-        if (detectedCharacter)
+        if (currentDecisionTarget)
         {
             Gizmos.color = GizmoColors.detectionTarget;
-            Gizmos.DrawLine(myPos, detectedCharacterPos);
+            Gizmos.DrawLine(myPos, currentDecisionPos);
         }
 
         if (hasNavPath)
@@ -63,119 +47,43 @@ public class CharacterAI : MonoBehaviour
 
     private void Awake()
     {
-        navPath = new NavMeshPath();
-
-        Vector3 myPos = transform.position;
-        navPathFirstPos = myPos;
-        navPathFinalPos = myPos;
+        navPath = new UnityEngine.AI.NavMeshPath();
+        NavClear();
     }
 
     private void Update()
     {
-        Vector3 myPos = transform.position;
+        //These two should be overriden by somehting like orders from an officer
+        ReadContext();
+        MakeCalculations();
 
-        bool hasTarget = PerformDetection();
-        if (hasTarget) navPathFinalPos = detectedCharacterPos;
-
-        Vector3 targetPos = navPathFinalPos;
-        hasNavPath = NavMesh.CalculatePath(myPos, targetPos, NavMesh.AllAreas, navPath);
-
-        if (!hasNavPath || navPathFinalPos == myPos)
-        {
-            hasNavPath = false;
-            navPath.ClearCorners();
-            navPathFirstPos = myPos;
-            navPathFinalPos = myPos;
-        }
-        else
-        {
-            if (navPath.corners.Length > 1) navPathFirstPos = navPath.corners[1];
-
-            Vector3 navDirection = navPathFirstPos - myPos;
-            navDirection.Normalize();
-
-            character.Rotation(navPathFirstPos);
-            character.Movement(navDirection);
-        }
+        //And this one should be called always.
+        TakeDecision();
     }
 
-    #region Detection
-    public bool CheckDetection(Character target)
+    private void ReadContext()
     {
-        if (!target) return false;
-
-        Allegiance myAllegiance = character.GetAllegiance();
-        Allegiance targetAllegiance = target.GetAllegiance();
-
-        bool isEnemy = myAllegiance.CheckOpponent(targetAllegiance);
-        if (!isEnemy) return false;
-
-        Vector3 rayFrom = character.GetTargetablePosition();
-        Vector3 rayTo = target.GetTargetablePosition();
-        Vector3 rayDir = (rayTo - rayFrom).normalized;
-        Ray ray = new Ray(rayFrom, rayDir);
-
-        float angle = Vector3.Angle(transform.forward, rayDir);
-        angle = Mathf.Abs(angle);
-        float halfSightRadius = sightRadius / 2F;
-
-        bool withinSightArc = angle < halfSightRadius;
-        if (!withinSightArc) return false;
-
-        bool withinSightRange = Physics.Raycast(ray, out RaycastHit hitInfo, sightRange);
-        if (!withinSightRange) return false;
-
-        bool sightNotBlocked = hitInfo.collider.gameObject == target.gameObject;
-        if (!sightNotBlocked) return false;
-
-        return true;
+        //Do detection - sight, hearing, etc
+        DetPerform();
     }
 
-    private bool PerformDetection()
+    private void MakeCalculations()
     {
-        if (detectedCharacter)
-        {
-            bool keepSame = CheckDetection(detectedCharacter);
-            if (keepSame)
-            {
-                SetDetectedTarget(detectedCharacter);
-                return true;
-            }
-        }
+        //Filter known enemies that can be attacked
+        //TODO: ...
 
-        Collider[] candidates = Physics.OverlapSphere(transform.position, sightRange);
-        foreach (Collider item in candidates)
-        {
-            GameObject gObj = item.gameObject;
-            if (gObj == gameObject) continue;   //Ignore self
-
-            Character possibleTarget = item.GetComponent<Character>();
-            if (!possibleTarget) continue;      //Must be an valid target
-
-            bool detected = CheckDetection(possibleTarget);
-            if (detected)
-            {
-                SetDetectedTarget(possibleTarget);
-                return true;
-            }
-        }
-
-        SetDetectedTarget(null);
-        return false;
+        //Filter known enemies that can be reached
+        CalcReachableEnemy();
     }
 
-    private void SetDetectedTarget(Character target)
+    private void TakeDecision()
     {
-        if (target)
-        {
-            detectedCharacter = target;
-            detectedCharacterPos = target.transform.position;
-        }
-        else
-        {
-            detectedCharacter = null;
-            detectedCharacterPos = transform.position;
-        }
+        //select best action
+        //  - check what to attack
+        //  - check where to move
+        DecideDecision();
+
+        //perform said action
+        ExecuteDecision();
     }
-    #endregion
 }
